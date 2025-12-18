@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { 
   FaGithub, FaExternalLinkAlt, FaLaptopCode, FaPython, 
-  FaHospital, FaDatabase, FaRobot, FaArrowRight, FaChartLine, 
+   FaDatabase, FaRobot, FaArrowRight, FaChartLine, 
   FaSearch, FaMap, FaTools, FaDesktop, FaCode
 } from 'react-icons/fa';
-import { SiJavascript, SiHtml5, SiCss3 } from 'react-icons/si';
+
 import { Link } from 'react-router-dom';
 
 const Projects = () => {

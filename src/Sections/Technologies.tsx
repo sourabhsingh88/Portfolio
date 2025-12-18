@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { 
-  FaPython, FaJava, FaJs, FaDatabase, 
+  FaPython, FaJava,  FaDatabase, 
   FaTools, FaDesktop, FaCode, FaChartBar, FaCloud
 } from 'react-icons/fa';
-import { SiNumpy, SiPandas, SiTensorflow, SiScikitlearn, SiMongodb, SiReact, SiNodedotjs} from 'react-icons/si';
+import { SiNumpy, SiPandas,  SiScikitlearn} from 'react-icons/si';
 
 const Technologies = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -121,30 +121,30 @@ const Technologies = () => {
     }
   };
 
-  const floatingVariants = {
-    animate: {
-      y: [0, -20, 0],
-      rotate: [0, 5, 0, -5, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "easeInOut"
-      }
-    }
-  };
+  // const floatingVariants = {
+  //   animate: {
+  //     y: [0, -20, 0],
+  //     rotate: [0, 5, 0, -5, 0],
+  //     transition: {
+  //       duration: 6,
+  //       repeat: Infinity,
+  //       repeatType: "reverse",
+  //       ease: "easeInOut"
+  //     }
+  //   }
+  // };
 
-  const pulseVariants = {
-    animate: {
-      scale: [1, 1.1, 1],
-      opacity: [0.5, 0.8, 0.5],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
+  // const pulseVariants = {
+  //   animate: {
+  //     scale: [1, 1.1, 1],
+  //     opacity: [0.5, 0.8, 0.5],
+  //     transition: {
+  //       duration: 3,
+  //       repeat: Infinity,
+  //       ease: "easeInOut"
+  //     }
+  //   }
+  // };
 
   // Programming Languages & Tools
   const programmingSkills = [

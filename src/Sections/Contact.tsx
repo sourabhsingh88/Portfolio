@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { 
   FaEnvelope, FaPhone, FaLinkedin, FaGithub, 
-  FaTwitter, FaMapMarkerAlt, FaLaptopCode, FaDatabase,
-  FaChartBar, FaBrain, FaRobot, FaCode, FaJava, FaPython, FaTools, FaDesktop
+  FaTwitter, FaMapMarkerAlt, FaDatabase,
+  FaChartBar, FaJava, FaPython, FaTools, FaDesktop
 } from 'react-icons/fa';
 
 const Contact = () => {

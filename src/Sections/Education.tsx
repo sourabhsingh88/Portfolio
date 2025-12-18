@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { 
   FaGraduationCap, FaUniversity, FaCalendarAlt, FaMedal, 
-  FaBook, FaLaptop, FaAward
+  
 } from 'react-icons/fa';
 
 const Education = () => {

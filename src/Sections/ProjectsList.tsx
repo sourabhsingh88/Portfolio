@@ -2,9 +2,8 @@ import { motion } from 'framer-motion';
 import {
   FaGithub, FaExternalLinkAlt, FaLaptopCode, FaPython,
   FaHospital, FaDatabase, FaRobot, FaArrowRight, FaArrowLeft, FaChartLine,
-  FaSearch, FaMap, FaTools, FaDesktop, FaCode, FaShoppingCart, FaComments, FaCloud
+  FaSearch, FaMap, FaTools, FaDesktop, FaCode
 } from 'react-icons/fa';
-import { SiJavascript, SiHtml5, SiCss3, SiReact, SiTailwindcss, SiNodedotjs, SiMongodb, SiSocketdotio, SiExpress } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 
 const ProjectsList = () => {

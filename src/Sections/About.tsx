@@ -1,6 +1,6 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { FaUser, FaLaptopCode, FaChartBar, FaDatabase, FaArrowRight, FaJava, FaPython, FaServer, FaCogs } from 'react-icons/fa';
+import { FaUser, FaLaptopCode, FaChartBar, FaDatabase, FaArrowRight, FaJava, FaPython, FaCogs } from 'react-icons/fa';
 
 const About = () => {
   const controls = useAnimation();
