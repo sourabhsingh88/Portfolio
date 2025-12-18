@@ -1,5 +1,72 @@
 # React + TypeScript + Vite
 
+# React + TypeScript + Vite – Personal Portfolio
+
+This project is a **personal portfolio web application** built using **React, TypeScript, and Vite**. It is designed to present my professional profile in a clean, structured, and performance-focused manner for recruiters and technical reviewers.
+
+The portfolio serves as a single platform to showcase my **skills, experience, projects, education, and resume**, with an emphasis on clarity, scalability, and modern frontend practices.
+
+---
+
+## 🚀 Features
+
+- **About Me**  
+  Professional summary highlighting career goals and technical interests.
+
+- **Skills**  
+  Categorized list of programming languages, frameworks, tools, and technologies.
+
+- **Experience**  
+  Internship, training, and project-based experience with responsibilities and outcomes.
+
+- **Projects**  
+  Academic and personal projects with descriptions, tech stack, and key learnings.
+
+- **Education**  
+  Academic background and relevant coursework.
+
+- **Resume**  
+  Downloadable resume for quick access.
+
+- **Contact**  
+  Links to email, GitHub, LinkedIn, and other professional profiles.
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** React, TypeScript  
+- **Build Tool:** Vite  
+- **Styling:** CSS / Tailwind CSS  
+- **Linting:** ESLint  
+- **Version Control:** Git & GitHub  
+
+---
+
+## 📂 Project Structure
+
+- Component-based architecture
+- Type-safe codebase using TypeScript
+- Clear separation of concerns for better maintainability
+- Fast development and build times with Vite
+
+---
+
+## 🎯 Project Objective
+
+The goal of this project is to:
+- Present a professional and recruiter-friendly portfolio
+- Demonstrate modern frontend development skills
+- Maintain a scalable and easily extendable codebase
+
+This portfolio is built for **real-world use**, not just as a demo project.
+
+---
+
+## ⚙️ Development Setup
+
+### SETUP := 
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

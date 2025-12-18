@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaLaptopCode, FaPython, 
-  FaHospital, FaDatabase, FaRobot, FaArrowRight, FaArrowLeft, FaChartLine, 
-  FaSearch, FaMap, FaTools, FaDesktop, FaCode, FaShoppingCart, FaComments, FaCloud } from 'react-icons/fa';
+import {
+  FaGithub, FaExternalLinkAlt, FaLaptopCode, FaPython,
+  FaHospital, FaDatabase, FaRobot, FaArrowRight, FaArrowLeft, FaChartLine,
+  FaSearch, FaMap, FaTools, FaDesktop, FaCode, FaShoppingCart, FaComments, FaCloud
+} from 'react-icons/fa';
 import { SiJavascript, SiHtml5, SiCss3, SiReact, SiTailwindcss, SiNodedotjs, SiMongodb, SiSocketdotio, SiExpress } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 
@@ -46,7 +48,7 @@ const ProjectsList = () => {
       ],
       links: [
         { type: "github", url: "https://github.com/sourabhsingh88/TradingBot", icon: <FaGithub /> },
-        { type: "live", url: "#", icon: <FaExternalLinkAlt /> }
+        { type: "live", url: "https://github.com/sourabhsingh88/TradingBot", icon: <FaExternalLinkAlt /> }
       ],
       bgColor: "from-green-900/20 to-blue-900/20"
     },
@@ -62,7 +64,7 @@ const ProjectsList = () => {
       ],
       links: [
         { type: "github", url: "https://github.com/sourabhsingh88/ImageSearchEngine", icon: <FaGithub /> },
-        { type: "live", url: "#", icon: <FaExternalLinkAlt /> }
+        { type: "live", url: "https://github.com/sourabhsingh88/ImageSearchEngine", icon: <FaExternalLinkAlt /> }
       ],
       bgColor: "from-purple-900/20 to-pink-900/20"
     },
@@ -78,7 +80,7 @@ const ProjectsList = () => {
       ],
       links: [
         { type: "github", url: "https://github.com/sourabhsingh88/Trip--Planner", icon: <FaGithub /> },
-        { type: "live", url: "#", icon: <FaExternalLinkAlt /> }
+        { type: "github", url: "https://github.com/sourabhsingh88/Trip--Planner", icon: <FaGithub /> },
       ],
       bgColor: "from-blue-900/20 to-cyan-900/20"
     },
@@ -96,10 +98,44 @@ const ProjectsList = () => {
       ],
       links: [
         { type: "github", url: "https://github.com/sourabhsingh88/Image-recognition", icon: <FaGithub /> },
-        { type: "live", url: "#", icon: <FaExternalLinkAlt /> }
+        { type: "live", url: "https://github.com/sourabhsingh88/Image-recognition", icon: <FaExternalLinkAlt /> }
       ],
       bgColor: "from-orange-900/20 to-red-900/20"
+    },
+    {
+      title: "CRM – Property Management Platform",
+      description: "Built a real-estate CRM system to manage property listings, leads, and client interactions. Implemented FastAPI-based backend services with Angular frontend for efficient lead tracking, property management, and scalable data operations.",
+      icon: <FaHospital />,
+      technologies: [
+        { name: "Python", icon: <FaPython /> },
+        { name: "FastAPI", icon: <FaTools /> },
+        { name: "Angular", icon: <FaDesktop /> },
+        { name: "MySQL", icon: <FaDatabase /> }
+      ],
+      links: [
+        {type: "github",url: "https://github.com/sourabhsingh88/CRM-Property",icon: <FaGithub />},
+        {type: "live",url: "https://github.com/sourabhsingh88/CRM-Property",icon: <FaExternalLinkAlt />}
+      ],
+      bgColor: "from-teal-900/20 to-emerald-900/20"
+    },
+    {
+      title: "Fit Plan Hub",
+      description: "Developed a full-stack fitness platform that connects users with verified trainers. Users can follow trainers, access structured fitness plans in their feed, and subscribe to premium plans. Trainers manage plans, subscribers, and followers via a dedicated dashboard.",
+      icon: <FaLaptopCode />,
+      technologies: [
+        { name: "Python", icon: <FaPython /> },
+        { name: "FastAPI", icon: <FaTools /> },
+        { name: "Angular", icon: <FaDesktop /> },
+        { name: "MySQL", icon: <FaDatabase /> }
+      ],
+      links: [
+        { type: "github",url: "https://github.com/sourabhsingh88/Fit_Plan_Hub",icon: <FaGithub />},
+        {type: "live",url: "https://github.com/sourabhsingh88/Fit_Plan_Hub", icon: <FaExternalLinkAlt />}
+      ],
+      bgColor: "from-indigo-900/20 to-purple-900/20"
     }
+
+
   ];
 
   return (
@@ -107,9 +143,9 @@ const ProjectsList = () => {
       {/* Background decorative elements */}
       <div className="absolute top-20 right-0 w-64 h-64 bg-blue-500 rounded-full filter blur-[120px] opacity-10"></div>
       <div className="absolute bottom-20 left-0 w-64 h-64 bg-purple-500 rounded-full filter blur-[120px] opacity-10"></div>
-      
+
       <div className="container mx-auto">
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -123,14 +159,14 @@ const ProjectsList = () => {
           >
             <span className="text-blue-400 font-medium">My Portfolio</span>
           </motion.div>
-          
+
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">All Projects</h1>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
           <p className="mt-6 text-gray-300 max-w-2xl mx-auto">
-            A comprehensive collection of my projects showcasing my skills and experience in web development, 
+            A comprehensive collection of my projects showcasing my skills and experience in web development,
             data science, and software engineering.
           </p>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -149,8 +185,8 @@ const ProjectsList = () => {
             </Link>
           </motion.div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={containerVariants}
           initial="hidden"
@@ -180,13 +216,13 @@ const ProjectsList = () => {
                     ))}
                   </div>
                 </div>
-                
+
                 <h3 className="text-xl font-bold mb-2">{project.title}</h3>
                 <p className="text-gray-300 text-sm mb-4">{project.description}</p>
-                
+
                 <div className="flex flex-wrap gap-2 mt-auto">
                   {project.technologies.map((tech, techIndex) => (
-                    <div 
+                    <div
                       key={techIndex}
                       className="flex items-center bg-gray-800 bg-opacity-50 px-2 py-1 rounded-full text-xs"
                     >
@@ -196,7 +232,7 @@ const ProjectsList = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div className="border-t border-blue-800/30 p-4 bg-gray-900/20">
                 <motion.a
                   href="#"
@@ -204,7 +240,7 @@ const ProjectsList = () => {
                   whileHover={{ x: 5 }}
                 >
                   <span>View Details</span>
-                  <motion.span 
+                  <motion.span
                     className="inline-block ml-1"
                     initial={{ x: 0 }}
                     whileHover={{ x: 3 }}

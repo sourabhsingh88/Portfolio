@@ -43,7 +43,7 @@ const Contact = () => {
     {
       name: "Twitter",
       icon: <FaTwitter />,
-      link: "#",
+      link: "https://x.com/rajputsour5402",
       color: "bg-blue-400 hover:bg-blue-500"
     }
   ];
