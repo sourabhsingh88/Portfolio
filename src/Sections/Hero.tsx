@@ -34,7 +34,7 @@ const Hero = () => {
     {
       name: 'LinkedIn',
       icon: <FaLinkedin />,
-      url: 'linkedin.com/in/sourabh-singh-mandloi',
+      url: 'https://www.linkedin.com/in/sourabh-singh-mandloi/',
       color: 'hover:text-blue-400'
     },
     {

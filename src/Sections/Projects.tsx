@@ -83,7 +83,7 @@ const Projects = () => {
         "Performed comprehensive backtesting on historical data"
       ],
       links: [
-        { type: "github", url: "https://github.com/sourabhsingh88/TradingBot", icon: <FaGithub /> },
+        { type: "github", url: "https://github.com/sourabhsingh88/Trading_Platform", icon: <FaGithub /> },
         { type: "live", url: "#", icon: <FaExternalLinkAlt /> }
       ],
       bgColor: "from-green-900/20 to-blue-900/20"
