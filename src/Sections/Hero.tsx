@@ -313,7 +313,7 @@ const Hero = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5, duration: 0.8 }}
                   >
-                    <img src="sourabh-profile.jpg" alt="" />
+                    <img src="sourabh-profilee.jpg" alt="" />
                   </motion.div>
                 </motion.div>
 
