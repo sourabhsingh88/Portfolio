@@ -179,6 +179,7 @@ const Navbar = () => {
                     Home
                   </Link>
                 </motion.div>
+                
                 <motion.div whileHover={{ scale: 1.05 }} className="relative px-0.5 sm:px-1">
                   <Link to="/projects" className={`px-2 sm:px-3 md:px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 ${location.pathname === '/projects' ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
                     Projects
