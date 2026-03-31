@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { 
-  FaEnvelope, FaPhone, FaLinkedin, FaGithub, 
+import {
+  FaEnvelope, FaPhone, FaLinkedin, FaGithub,
   FaTwitter, FaMapMarkerAlt, FaDatabase,
   FaChartBar, FaJava, FaPython, FaTools, FaDesktop
 } from 'react-icons/fa';
@@ -9,9 +9,9 @@ const Contact = () => {
   const contactInfo = [
     {
       type: "Email",
-      value: "sourabhsinghmandloi122@gmail.com",
+      value: "devsourabh07@gmail.com",
       icon: <FaEnvelope />,
-      link: "mailto:sourabhsinghmandloi122@gmail.com"
+      link: "mailto:devsourabh07@gmail.com"
     },
     {
       type: "Phone",
@@ -102,7 +102,7 @@ const Contact = () => {
       scale: 1.3,
       rotate: 10,
       boxShadow: "0px 15px 35px rgba(0, 0, 0, 0.4)",
-      transition: { 
+      transition: {
         duration: 0.4,
         type: "spring",
         stiffness: 300,
@@ -117,7 +117,7 @@ const Contact = () => {
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 opacity-50"></div>
       <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-blue-500 opacity-5"></div>
       <div className="absolute -bottom-16 -left-16 w-32 h-32 rounded-full bg-purple-500 opacity-5"></div>
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -138,142 +138,82 @@ const Contact = () => {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="bg-gray-800 bg-opacity-50 rounded-xl p-6 md:p-8 border border-gray-700 shadow-xl"
+            transition={{ duration: 0.6 }}
+            className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl p-8 border border-white/10 shadow-2xl flex flex-col"
           >
-            <h3 className="text-2xl font-bold text-white mb-6">My Expertise</h3>
-            
-            <div className="relative h-[300px] md:h-[350px] w-full overflow-hidden">
-              {/* Particle Effects */}
-              {[...Array(20)].map((_, i) => (
+            <h3 className="text-3xl font-bold text-white mb-8 text-center">
+              My Expertise
+            </h3>
+
+            <div className="flex justify-center items-center flex-1">
+              <div className="relative w-[400px] h-[400px]">
+
+                {/* Rings */}
+                <div className="absolute w-full h-full rounded-full border border-white/10"></div>
+                <div className="absolute w-[280px] h-[280px] rounded-full border border-white/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+                {/* Center */}
                 <motion.div
-                  key={`particle-${i}`}
-                  className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-30"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                  }}
-                  animate={{
-                    y: [0, -100, 0],
-                    opacity: [0, 1, 0],
-                    scale: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 3 + Math.random() * 2,
-                    repeat: Infinity,
-                    delay: Math.random() * 2,
-                  }}
-                />
-              ))}
-              
-              {skillBubbles.map((skill, index) => (
-                <motion.div
-                  key={index}
-                  className={`absolute bg-gradient-to-br ${skill.color} rounded-full shadow-lg p-4 w-20 h-20 md:w-24 md:h-24 flex flex-col items-center justify-center cursor-pointer border-2 border-white/20 backdrop-blur-sm`}
-                  style={{
-                    left: `${(index % 3) * 33 + 10}%`,
-                    top: `${Math.floor(index / 3) * 40 + 15}%`,
-                  }}
-                  custom={index}
-                  variants={floatingBubbleVariants}
-                  initial="initial"
-                  animate="animate"
-                  whileHover="hover"
-                  whileTap={{ scale: 0.9 }}
+                  className="absolute top-1/2 left-1/2 w-40 h-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-2xl z-20"
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
                 >
-                  <motion.div 
-                    className="text-white text-2xl mb-1"
-                    animate={{
-                      rotate: [0, 5, -5, 0],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: skill.delay,
-                    }}
-                  >
-                    {skill.icon}
-                  </motion.div>
-                  <motion.div 
-                    className="text-white text-xs font-medium text-center opacity-0 absolute -bottom-8 whitespace-nowrap bg-black/50 px-2 py-1 rounded-md backdrop-blur-sm"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileHover={{ 
-                      opacity: 1, 
-                      y: -5, 
-                      scale: 1.1,
-                      transition: { duration: 0.3 }
-                    }}
-                  >
-                    {skill.label}
-                  </motion.div>
-                  
-                  {/* Glow effect on hover */}
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent opacity-0"
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
+                  Core Skills
                 </motion.div>
-              ))}
-              
-              <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg text-center p-4 z-10 cursor-pointer border-2 border-white/30 backdrop-blur-sm"
-                animate={{
-                  boxShadow: [
-                    "0px 0px 20px rgba(59, 130, 246, 0.3)", 
-                    "0px 0px 40px rgba(59, 130, 246, 0.6)", 
-                    "0px 0px 60px rgba(147, 51, 234, 0.4)",
-                    "0px 0px 40px rgba(59, 130, 246, 0.6)", 
-                    "0px 0px 20px rgba(59, 130, 246, 0.3)"
-                  ],
-                  scale: [1, 1.05, 1],
-                  rotate: [0, 2, -2, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut"
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  boxShadow: "0px 0px 80px rgba(59, 130, 246, 0.8)",
-                  transition: { duration: 0.3 }
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
+
+                {/* Orbit Rotation */}
                 <motion.div
-                  animate={{
-                    textShadow: [
-                      "0px 0px 10px rgba(255, 255, 255, 0.5)",
-                      "0px 0px 20px rgba(255, 255, 255, 0.8)",
-                      "0px 0px 10px rgba(255, 255, 255, 0.5)"
-                    ]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
+                  className="absolute w-full h-full"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 >
-                  Let's Collaborate
+                  {skillBubbles.map((skill, index) => {
+                    const radius = 160;
+                    const angle = (index / skillBubbles.length) * 2 * Math.PI;
+
+                    const x = radius * Math.cos(angle);
+                    const y = radius * Math.sin(angle);
+
+                    return (
+                      <motion.div
+                        key={index}
+                        className="absolute w-28 h-28 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl flex items-center justify-center"
+                        style={{
+                          left: `calc(50% + ${x}px)`,
+                          top: `calc(50% + ${y}px)`,
+                          transform: "translate(-50%, -50%)"
+                        }}
+                      >
+                        {/* Counter rotation (IMPORTANT FIX) */}
+                        <motion.div
+                          className="flex flex-col items-center text-white"
+                          animate={{ rotate: -360 }}
+                          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                        >
+                          <div className="text-2xl mb-1">{skill.icon}</div>
+                          <div className="text-xs text-center px-2">
+                            {skill.label}
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
-              </motion.div>
+
+              </div>
             </div>
-            
-            <div className="mt-8 text-center">
-              <motion.a
-                href="mailto:sourabhsinghmandloi122@gmail.com"
-                className="inline-block py-3 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-lg transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
+
+            {/* CTA */}
+            <div className="text-center mt-8">
+              <a
+                href="mailto:devsourabh07@gmail.com"
+                className="inline-block px-8 py-4 text-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-lg hover:scale-105 transition"
               >
-                Reach Out Now
-              </motion.a>
+                📩 Start Your Project
+              </a>
             </div>
           </motion.div>
-          
+
           {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -283,8 +223,8 @@ const Contact = () => {
           >
             <div className="bg-gray-800 bg-opacity-50 rounded-xl p-6 md:p-8 border border-gray-700 shadow-xl mb-8">
               <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
-              
-              <motion.div 
+
+              <motion.div
                 className="space-y-6"
                 variants={containerVariants}
                 initial="hidden"
@@ -309,10 +249,10 @@ const Contact = () => {
                 ))}
               </motion.div>
             </div>
-            
+
             <div className="bg-gray-800 bg-opacity-50 rounded-xl p-6 md:p-8 border border-gray-700 shadow-xl">
               <h3 className="text-2xl font-bold text-white mb-6">Connect With Me</h3>
-              
+
               <div className="flex flex-wrap gap-4">
                 {socialLinks.map((social, index) => (
                   <motion.a
@@ -327,10 +267,10 @@ const Contact = () => {
                   </motion.a>
                 ))}
               </div>
-              
+
               <div className="mt-8 p-4 bg-blue-900 bg-opacity-20 rounded-lg border border-blue-800 border-opacity-30">
                 <p className="text-gray-300 text-sm">
-                  I'm currently available for freelance work and full-time positions. 
+                  I'm currently available for freelance work and full-time positions.
                   If you have a project that needs some creative work, feel free to contact me.
                 </p>
               </div>

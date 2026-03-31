@@ -98,9 +98,9 @@ const Footer = () => {
   const contactInfo = [
     {
       type: "Email",
-      value: "sourabhsinghmandloi122@gmail.com",
+      value: "devsourabh07@gmail.com",
       icon: <FaEnvelope />,
-      link: "mailto:sourabhsinghmandloi122@gmail.com",
+      link: "mailto:devsourabh07@gmail.com",
     },
     {
       type: "Phone",

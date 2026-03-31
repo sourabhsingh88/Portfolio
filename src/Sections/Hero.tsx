@@ -40,7 +40,7 @@ const Hero = () => {
     {
       name: 'Email',
       icon: <FaEnvelope />,
-      url: 'mailto:sourabhsinghmandloi122@gmail.com',
+      url: 'mailto:devsourabh07@gmail.com',
       color: 'hover:text-red-400'
     }
   ];
@@ -228,7 +228,7 @@ const Hero = () => {
                     <div className="w-9 h-9 rounded-full bg-blue-500/30 flex items-center justify-center backdrop-blur-sm">
                       <FaEnvelope className="text-blue-300" />
                     </div>
-                    <span className="tracking-wide text-sm sm:text-base">sourabhsinghmandloi122@gmail.com</span>
+                    <span className="tracking-wide text-sm sm:text-base">devsourabh07@gmail.com</span>
                   </motion.div>
                 </motion.div>
 

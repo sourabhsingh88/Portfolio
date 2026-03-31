@@ -132,7 +132,7 @@ const Navbar = () => {
           >
             <Link to="/" className="flex items-center">
               <span className="text-blue-400">S</span>ourabh
-              <span className="ml-1 text-gray-400 font-normal">Singh</span>
+              <span className="ml-1 text-gray-400 font-normal"> Singh</span>
             </Link>
           </motion.div>
 
