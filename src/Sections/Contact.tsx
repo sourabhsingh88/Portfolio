@@ -183,7 +183,14 @@ const Contact = () => {
                           top: `calc(50% + ${y}px)`,
                           transform: "translate(-50%, -50%)"
                         }}
+                        variants={floatingBubbleVariants}
+                        initial="initial"
+                        animate="animate"
+                        whileHover="hover"
+                        custom={index}
                       >
+                        {/* existing inner content stays same */}
+
                         {/* Counter rotation (IMPORTANT FIX) */}
                         <motion.div
                           className="flex flex-col items-center text-white"
