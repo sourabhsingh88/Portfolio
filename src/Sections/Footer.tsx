@@ -32,7 +32,7 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       setTimeout(() => {
@@ -44,7 +44,7 @@ const Footer = () => {
     }
   };
 
-  const handleFooterNav = (sectionId) => {
+  const handleFooterNav = (sectionId: string) => {
     if (isHomePage) {
       scrollToSection(sectionId);
     } else {
