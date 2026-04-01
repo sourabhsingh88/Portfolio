@@ -97,39 +97,39 @@ const Contact = () => {
       transition: { type: "spring", stiffness: 400, damping: 10 }
     }
   };
-  const floatingBubbleVariants = {
-    initial: () => ({
-      x: 0,
-      y: 0,
-      scale: 0.8,
-      opacity: 0,
-      rotate: -180
-    }),
-    animate: (index: number) => ({
-      x: [0, Math.sin(index * 0.5) * 30, Math.sin(index * 0.3) * 25, 0],
-      y: [0, Math.cos(index * 0.7) * 25, Math.cos(index * 0.4) * 30, 0],
-      scale: [0.8, 1.1, 0.9, 1.05, 0.8],
-      opacity: [0, 1, 0.9, 1, 0.8],
-      rotate: [-180, 0, 5, -5, 0],
-      transition: {
-        duration: 4 + index * 0.5,
-        repeat: Infinity,
-        repeatType: "reverse" as const,
-        ease: "easeInOut"
-      }
-    }),
-    hover: {
-      scale: 1.3,
-      rotate: 10,
-      boxShadow: "0px 15px 35px rgba(0, 0, 0, 0.4)",
-      transition: {
-        duration: 0.4,
-        type: "spring",
-        stiffness: 300,
-        damping: 20
-      }
-    }
-  };
+  // const floatingBubbleVariants = {
+  //   initial: () => ({
+  //     x: 0,
+  //     y: 0,
+  //     scale: 0.8,
+  //     opacity: 0,
+  //     rotate: -180
+  //   }),
+  //   animate: (index: number) => ({
+  //     x: [0, Math.sin(index * 0.5) * 30, Math.sin(index * 0.3) * 25, 0],
+  //     y: [0, Math.cos(index * 0.7) * 25, Math.cos(index * 0.4) * 30, 0],
+  //     scale: [0.8, 1.1, 0.9, 1.05, 0.8],
+  //     opacity: [0, 1, 0.9, 1, 0.8],
+  //     rotate: [-180, 0, 5, -5, 0],
+  //     transition: {
+  //       duration: 4 + index * 0.5,
+  //       repeat: Infinity,
+  //       repeatType: "reverse" as const,
+  //       ease: "easeInOut"
+  //     }
+  //   }),
+  //   hover: {
+  //     scale: 1.3,
+  //     rotate: 10,
+  //     boxShadow: "0px 15px 35px rgba(0, 0, 0, 0.4)",
+  //     transition: {
+  //       duration: 0.4,
+  //       type: "spring",
+  //       stiffness: 300,
+  //       damping: 20
+  //     }
+  //   }
+  // };
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
