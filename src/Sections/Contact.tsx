@@ -77,6 +77,26 @@ const Contact = () => {
     { icon: <FaDesktop />, label: "Web Development", color: "from-indigo-500 to-indigo-600", delay: 1.0 }
   ];
 
+  const bubblePulseVariants = {
+    initial: { opacity: 0, scale: 0 },
+    animate: () => ({
+      opacity: 1,
+      scale: [1, 1.05, 1], // Subtle breathing effect
+      transition: {
+        scale: {
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+          
+        },
+        opacity: { duration: 0.5 }
+      }
+    }),
+    hover: {
+      scale: 1.2,
+      transition: { type: "spring", stiffness: 400, damping: 10 }
+    }
+  };
   const floatingBubbleVariants = {
     initial: () => ({
       x: 0,
@@ -167,40 +187,41 @@ const Contact = () => {
                   animate={{ rotate: 360 }}
                   transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 >
+
                   {skillBubbles.map((skill, index) => {
+                    // Math to place bubbles evenly in a circle
                     const radius = 160;
                     const angle = (index / skillBubbles.length) * 2 * Math.PI;
-
                     const x = radius * Math.cos(angle);
                     const y = radius * Math.sin(angle);
 
                     return (
                       <motion.div
                         key={index}
-                        className="absolute w-28 h-28 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl flex items-center justify-center"
+                        className="absolute w-24 h-24 md:w-28 md:h-28 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl flex items-center justify-center"
+                        // Use style for the initial circular layout
                         style={{
-                          left: `calc(50% + ${x}px)`,
-                          top: `calc(50% + ${y}px)`,
-                          transform: "translate(-50%, -50%)"
+                          left: '50%',
+                          top: '50%',
+                          x: x - 56, // Centers the bubble (half of w-28 is 56px)
+                          y: y - 56,
                         }}
-                        variants={floatingBubbleVariants}
+                        variants={bubblePulseVariants}
                         initial="initial"
                         animate="animate"
                         whileHover="hover"
                         custom={index}
                       >
-                        {/* existing inner content stays same */}
-
-                        {/* Counter rotation (IMPORTANT FIX) */}
+                        {/* Counter-rotation: Keeps the icons/text from turning upside down */}
                         <motion.div
                           className="flex flex-col items-center text-white"
-                          animate={{ rotate: -360 }}
+                          animate={{ rotate: -360 }} // Must match parent duration to stay upright
                           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                         >
                           <div className="text-2xl mb-1">{skill.icon}</div>
-                          <div className="text-xs text-center px-2">
+                          <p className="text-[10px] md:text-xs text-center px-2 font-medium">
                             {skill.label}
-                          </div>
+                          </p>
                         </motion.div>
                       </motion.div>
                     );
