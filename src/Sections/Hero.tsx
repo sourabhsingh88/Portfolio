@@ -1,357 +1,377 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaDownload } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import {
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+  FaPhone,
+  FaWhatsapp,
+  FaCopy,
+  FaCheck,
+  FaDownload,
+  FaArrowRight,
+  FaCode,
+  FaBolt,
+  FaServer,
+  FaBrain,
+} from 'react-icons/fa';
+import MagneticButton from '../components/MagneticButton';
 
-const Hero = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-        duration: 0.5
-      }
-    }
-  };
+interface HeroProps {
+  onOpenInquiry?: () => void;
+  onOpenTerminal?: () => void;
+}
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
-  };
+const PHRASES = [
+  'Full-Stack Systems Architect',
+  'AI / ML & Trading Bot Engineer',
+  'High-Throughput API Specialist',
+  'Distributed Backend Developer',
+];
 
-  const socialLinks = [
-    {
-      name: 'GitHub',
-      icon: <FaGithub />,
-      url: 'https://github.com/sourabhsingh88',
-      color: 'hover:text-gray-300'
-    },
-    {
-      name: 'LinkedIn',
-      icon: <FaLinkedin />,
-      url: 'https://www.linkedin.com/in/sourabh-singh-mandloi/',
-      color: 'hover:text-blue-400'
-    },
-    {
-      name: 'Email',
-      icon: <FaEnvelope />,
-      url: 'mailto:devsourabh07@gmail.com',
-      color: 'hover:text-red-400'
-    }
-  ];
+export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, onOpenTerminal }) => {
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+  const [typewriterText, setTypewriterText] = useState('');
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const scrollDownVariants = {
-    initial: { y: 0 },
-    animate: {
-      y: 10,
-      transition: {
-        repeat: Infinity,
-        repeatType: "reverse" as const,
-        duration: 1.5,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const imageVariants = {
-    hidden: { scale: 0.8, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut",
-        delay: 0.2
-      }
-    }
-  };
-
-  const buttonVariants = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { duration: 0.5, delay: 1.2 }
-    },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
-      transition: { duration: 0.3 }
-    },
-    tap: { scale: 0.95 }
-  };
-
-  const socialLinkVariants = {
-    hover: {
-      y: -5,
-      boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.2)",
-      transition: { duration: 0.2 }
-    },
-    tap: { scale: 0.95 }
-  };
-
-  const cursorVariants = {
-    blinking: {
-      opacity: [0, 0, 1, 1],
-      transition: {
-        duration: 1,
-        repeat: Infinity,
-        repeatType: "loop" as const,
-        ease: "linear",
-      }
-    }
-  };
-
-  const [text, setText] = useState("");
-  const [index, setIndex] = useState(0);
-  const fullText = "Software Engineer & AIML Enthusiast";
-
+  // Typewriter effect loop
   useEffect(() => {
-    if (index < fullText.length) {
-      const timeout = setTimeout(() => {
-        setText(prevText => prevText + fullText[index]);
-        setIndex(prevIndex => prevIndex + 1);
-      }, 100);
+    const currentPhrase = PHRASES[phraseIndex];
+    const typingSpeed = isDeleting ? 40 : 80;
 
-      return () => clearTimeout(timeout);
-    }
-  }, [index, fullText]);
+    const timer = setTimeout(() => {
+      if (!isDeleting && charIndex < currentPhrase.length) {
+        setTypewriterText(currentPhrase.slice(0, charIndex + 1));
+        setCharIndex(charIndex + 1);
+      } else if (isDeleting && charIndex > 0) {
+        setTypewriterText(currentPhrase.slice(0, charIndex - 1));
+        setCharIndex(charIndex - 1);
+      } else if (!isDeleting && charIndex === currentPhrase.length) {
+        setTimeout(() => setIsDeleting(true), 1800);
+      } else if (isDeleting && charIndex === 0) {
+        setIsDeleting(false);
+        setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
+      }
+    }, typingSpeed);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId.replace('#', ''));
-    if (element) {
-      console.log(`Hero scrolling to: ${sectionId}, element:`, element);
-      window.scrollTo({
-        top: element.offsetTop - 80,
-        behavior: 'smooth'
-      });
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, phraseIndex]);
+
+  const copyToClipboard = (text: string, type: 'email' | 'phone') => {
+    navigator.clipboard.writeText(text);
+    if (type === 'email') {
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
     } else {
-      console.error(`Element with ID "${sectionId}" not found from Hero`);
+      setCopiedPhone(true);
+      setTimeout(() => setCopiedPhone(false), 2000);
+    }
+  };
+
+  const scrollToProjects = () => {
+    const el = document.getElementById('projects');
+    if (el) {
+      window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white overflow-hidden">
-      {/* Enhanced background gradients */}
-      <div className="absolute top-0 right-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-blue-600 rounded-full filter blur-[150px] opacity-15 transform translate-x-1/4 -translate-y-1/4"></div>
-      <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple-600 rounded-full filter blur-[150px] opacity-15 transform -translate-x-1/4 translate-y-1/4"></div>
-      <div className="absolute top-1/3 left-1/4 w-[15vw] h-[15vw] max-w-[200px] max-h-[200px] bg-cyan-500 rounded-full filter blur-[120px] opacity-10"></div>
-      <div className="absolute bottom-1/3 right-1/4 w-[20vw] h-[20vw] max-w-[250px] max-h-[250px] bg-indigo-500 rounded-full filter blur-[130px] opacity-10"></div>
+    <div
+      id="hero"
+      className="relative min-h-screen w-full bg-[#0a0a0f] text-white pt-28 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center overflow-hidden cyber-grid"
+    >
+      {/* Ambient Electric Glow Orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-tr from-cyan-600/15 via-blue-700/10 to-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Main content */}
-      <motion.div
-        id="hero"
-        className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16">
-          <div className="mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-4">
+      <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Kinetic Info & CTAs */}
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            {/* Live Status Pill */}
             <motion.div
-              className="w-full lg:w-1/2 space-y-5 sm:space-y-6 text-center lg:text-left order-2 lg:order-1"
-              variants={containerVariants}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-emerald-500/40 text-emerald-300 font-mono text-xs shadow-[0_0_20px_rgba(0,255,136,0.2)] backdrop-blur-md"
             >
-              <div className="max-w-xl mx-auto lg:mx-0">
-                <motion.div
-                  className="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 mb-4 backdrop-blur-sm"
-                  variants={itemVariants}
-                >
-                  <span className="text-blue-300 font-medium">Hello, I'm</span>
-                </motion.div>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              </span>
+              <span className="font-semibold tracking-wide">
+                Open for Freelance & High-Impact Contracts
+              </span>
+            </motion.div>
 
-                <motion.h1
-                  className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-3"
-                  variants={itemVariants}
-                >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-400">
-                    Sourabh Singh Mandloi
-                  </span>
-                </motion.h1>
+            {/* High Impact Headline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="space-y-2"
+            >
+              <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold font-heading tracking-tight leading-[1.08]">
+                Architecting <br className="hidden sm:inline" />
+                <span className="text-gradient-cyan">High-Velocity</span> APIs &{' '}
+                <span className="text-gradient-neon">AI Systems</span>.
+              </h1>
 
-                <motion.div
-                  className="h-auto min-h-[40px] sm:min-h-[48px] mb-5 overflow-visible"
-                  variants={itemVariants}
-                >
-                  <div className="text-lg sm:text-xl md:text-2xl text-gray-200 font-medium flex flex-wrap justify-center lg:justify-start">
-                    <span className="break-words">{text}</span>
-                    <motion.span
-                      variants={cursorVariants}
-                      animate="blinking"
-                      className="inline-block w-[3px] h-[1em] bg-blue-400 ml-1"
-                    />
-                  </div>
-                </motion.div>
-
-                <motion.p
-                  className="text-gray-300 text-base sm:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed"
-                  variants={itemVariants}
-                >
-                  As a passionate Web Developer and AI/ML enthusiast, I enjoy transforming complex challenges into simple, user-friendly solutions.
-                  By blending intelligent technology with modern web development, I strive to build applications that are not only technically robust but also deliver a meaningful business impact.
-
-                </motion.p>
-
-                <motion.div
-                  className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start pt-2"
-                  variants={itemVariants}
-                >
-                  {socialLinks.map((link, index) => (
-                    <motion.a
-                      key={index}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center gap-2 bg-gray-800/80 hover:bg-gray-700 transition-all duration-300 px-4 py-2.5 rounded-lg border border-gray-700/50 backdrop-blur-sm ${link.color}`}
-                      variants={socialLinkVariants}
-                      whileHover="hover"
-                      whileTap="tap"
-                    >
-                      {link.icon} <span className="hidden sm:inline">{link.name}</span>
-                    </motion.a>
-                  ))}
-                </motion.div>
-
-                <motion.div
-                  className="pt-8 space-y-3 text-gray-300"
-                  variants={itemVariants}
-                >
-                  <motion.div
-                    className="flex items-center gap-3 justify-center lg:justify-start"
-                    whileHover={{ x: 5 }}
-                  >
-                    <div className="w-9 h-9 rounded-full bg-blue-500/30 flex items-center justify-center backdrop-blur-sm">
-                      <FaEnvelope className="text-blue-300" />
-                    </div>
-                    <span className="tracking-wide text-sm sm:text-base">devsourabh07@gmail.com</span>
-                  </motion.div>
-                </motion.div>
-
-                <motion.div
-                  className="pt-8 flex flex-wrap gap-4 justify-center lg:justify-start"
-                  variants={itemVariants}
-                >
-                  <motion.a
-                    href="#projects"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection('projects');
-                    }}
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-6 py-3 rounded-lg font-medium shadow-lg shadow-blue-900/20 inline-flex items-center gap-2 transition-all duration-300"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                  >
-                    View My Work
-                  </motion.a>
-
-                  <motion.a
-                    href="/Sourabh-Resume.pdf"
-                    className="bg-gray-800/80 hover:bg-gray-700 border border-gray-700/50 px-6 py-3 rounded-lg font-medium shadow-lg backdrop-blur-sm inline-flex items-center gap-2 transition-all duration-300"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    download
-                  >
-                    <FaDownload className="text-blue-400" />
-                    Download CV
-                  </motion.a>
-                </motion.div>
+              {/* Dynamic Typewriter Subtitle */}
+              <div className="h-8 flex items-center justify-center lg:justify-start gap-2 pt-1 font-mono text-base sm:text-lg text-slate-300">
+                <span className="text-cyan-400 font-bold">&gt;</span>
+                <span className="text-cyan-200">{typewriterText}</span>
+                <span className="w-2 h-4 bg-cyan-400 animate-pulse inline-block" />
               </div>
             </motion.div>
 
-            <motion.div
-              className="w-full lg:w-1/2 flex justify-center order-1 lg:order-2 mb-8 lg:mb-0"
-              variants={containerVariants}
+            {/* Value Proposition Statement */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0 font-sans"
             >
-              <div className="relative">
-                {/* Animated background circles */}
-                <motion.div
-                  className="absolute top-1/2 left-1/2 w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] rounded-full bg-gradient-to-br from-blue-600/20 to-indigo-600/20"
-                  style={{ translateX: "-50%", translateY: "-50%" }}
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    rotate: [0, 5, 0],
-                    transition: {
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      duration: 5,
-                      ease: "easeInOut"
-                    }
-                  }}
-                />
-                <motion.div
-                  className="absolute top-1/2 left-1/2 w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] rounded-full bg-gradient-to-br from-purple-600/20 to-blue-600/10"
-                  style={{ translateX: "-50%", translateY: "-50%" }}
-                  animate={{
-                    scale: [1.05, 1, 1.05],
-                    rotate: [0, -5, 0],
-                    transition: {
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      duration: 6,
-                      ease: "easeInOut"
-                    }
-                  }}
-                />
+              I am <strong className="text-white font-semibold">Sourabh Singh Mandloi</strong>,
+              an engineer bridging resilient backend architecture (Spring Boot, FastAPI, Oracle DB)
+              with deep learning models and automated algorithmic engines. Handling 10k+ daily queries with
+              sub-millisecond optimization and production-grade reliability.
+            </motion.p>
 
-                {/* Profile picture/avatar container */}
-                <motion.div
-                  className="relative w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] rounded-full overflow-hidden border-4 border-gray-800/80 shadow-2xl backdrop-blur-sm"
-                  variants={imageVariants}
-                  whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-purple-600/30"></div>
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center text-8xl text-blue-300 font-bold"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5, duration: 0.8 }}
+            {/* Quick Contact HUD Bar (Email + Phone + WhatsApp) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1"
+            >
+              {/* Email Chip with Quick-Copy */}
+              <div className="relative group">
+                <div className="flex items-center gap-2 bg-[#0e1422] border border-cyan-500/30 hover:border-cyan-400/80 px-3.5 py-2 rounded-xl text-xs font-mono transition-all">
+                  <a
+                    href="mailto:devsourabh07@gmail.com"
+                    className="flex items-center gap-2 text-cyan-300 hover:text-cyan-200"
                   >
-                    <img src="sourabh-profilee.jpg" alt="" />
-                  </motion.div>
-                </motion.div>
-
-                {/* Decorative elements */}
-                <motion.div
-                  className="absolute top-0 right-0 w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/40 to-cyan-500/20 backdrop-blur-sm"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 1.5, duration: 0.7 }}
-                />
-                <motion.div
-                  className="absolute bottom-4 left-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500/40 to-indigo-500/20 backdrop-blur-sm"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 1.7, duration: 0.7 }}
-                />
-                <motion.div
-                  className="absolute top-1/2 -right-4 w-5 h-20 rounded-full bg-gradient-to-br from-blue-500/30 to-indigo-500/10 backdrop-blur-sm"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 1.9, duration: 0.7 }}
-                />
+                    <FaEnvelope className="text-cyan-400" />
+                    <span>devsourabh07@gmail.com</span>
+                  </a>
+                  <button
+                    onClick={() => copyToClipboard('devsourabh07@gmail.com', 'email')}
+                    className="ml-1 p-1 hover:text-white text-slate-400 transition-colors"
+                    title="Copy Email"
+                  >
+                    {copiedEmail ? <FaCheck className="text-emerald-400" size={11} /> : <FaCopy size={11} />}
+                  </button>
+                </div>
+                {/* Tooltip */}
+                {copiedEmail && (
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded shadow-lg">
+                    Copied to clipboard!
+                  </div>
+                )}
               </div>
+
+              {/* Phone Chip with Direct Call & WhatsApp */}
+              <div className="relative group">
+                <div className="flex items-center gap-2 bg-[#0e1422] border border-slate-700 hover:border-emerald-500/80 px-3.5 py-2 rounded-xl text-xs font-mono transition-all">
+                  <a
+                    href="tel:+919755826293"
+                    className="flex items-center gap-1.5 text-slate-300 hover:text-emerald-300"
+                  >
+                    <FaPhone className="text-emerald-400 text-xs" />
+                    <span>+91 9755826293</span>
+                  </a>
+
+                  <a
+                    href="https://wa.me/919755826293?text=Hi%20Sourabh%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1 text-emerald-400 hover:text-emerald-300 transition-colors"
+                    title="Connect on WhatsApp"
+                  >
+                    <FaWhatsapp size={13} />
+                  </a>
+
+                  <button
+                    onClick={() => copyToClipboard('+919755826293', 'phone')}
+                    className="p-1 hover:text-white text-slate-400 transition-colors"
+                    title="Copy Phone"
+                  >
+                    {copiedPhone ? <FaCheck className="text-emerald-400" size={11} /> : <FaCopy size={11} />}
+                  </button>
+                </div>
+                {copiedPhone && (
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded shadow-lg">
+                    Copied!
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+            {/* Core Action Buttons with Magnetic Physics */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2"
+            >
+              {/* Start a Project Primary CTA */}
+              <MagneticButton strength={25}>
+                <button
+                  onClick={onOpenInquiry}
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 hover:from-cyan-300 hover:to-purple-500 text-slate-950 font-heading text-sm font-bold tracking-wide shadow-[0_0_25px_rgba(0,242,254,0.4)] transition-all flex items-center gap-2 group"
+                >
+                  <FaBolt className="text-slate-950 group-hover:scale-110 transition-transform" />
+                  <span>Start a Project</span>
+                  <FaArrowRight className="text-slate-950 text-xs group-hover:translate-x-1 transition-transform" />
+                </button>
+              </MagneticButton>
+
+              {/* Inspect Code / Architecture CTA */}
+              <MagneticButton strength={20}>
+                <button
+                  onClick={scrollToProjects}
+                  className="px-6 py-3.5 rounded-xl bg-[#0f1422] hover:bg-[#141b2e] border border-cyan-500/30 hover:border-cyan-400 text-slate-200 text-sm font-heading font-semibold transition-all flex items-center gap-2"
+                >
+                  <FaCode className="text-cyan-400" />
+                  <span>Inspect Code & Architecture</span>
+                </button>
+              </MagneticButton>
+
+              {/* Download CV */}
+              <a
+                href="/Sourabh-Resume.pdf"
+                download
+                className="px-4 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono inline-flex items-center gap-2 transition-colors"
+              >
+                <FaDownload className="text-cyan-400" />
+                <span className="hidden sm:inline">Resume</span>
+              </a>
+            </motion.div>
+
+            {/* Social Links Row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex items-center justify-center lg:justify-start gap-3 pt-2 text-slate-400"
+            >
+              <span className="text-xs font-mono text-slate-500 uppercase">Channels:</span>
+              <a
+                href="https://github.com/sourabhsingh88"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:text-white transition-colors"
+                aria-label="GitHub"
+              >
+                <FaGithub size={14} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/sourabh-singh-mandloi/"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:text-cyan-400 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin size={14} />
+              </a>
+              <button
+                onClick={onOpenTerminal}
+                className="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 text-xs font-mono transition-colors"
+              >
+                &gt;_ CLI
+              </button>
             </motion.div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-blue-300"
-        initial="initial"
-        animate="animate"
-        variants={scrollDownVariants}
-      >
-        <span className="text-sm mb-2 text-gray-300">Scroll Down</span>
-        <FaArrowDown />
-      </motion.div>
+          {/* Right Column: Cybernetic Avatar & Telemetry HUD */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
+            {/* Holographic Avatar Frame */}
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
+              {/* Outer Counter-Rotating Holographic Rings */}
+              <motion.div
+                className="absolute inset-0 rounded-full border border-cyan-400/30 border-dashed"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+              />
+              <motion.div
+                className="absolute -inset-4 rounded-full border border-purple-500/20 border-dotted"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+              />
+
+              {/* Ambient Radial Aura */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500/20 via-transparent to-purple-500/20 blur-xl" />
+
+              {/* Core Image Pod */}
+              <div className="relative w-56 h-56 sm:w-72 sm:h-72 rounded-full p-1.5 bg-gradient-to-br from-cyan-400 via-blue-600 to-purple-600 shadow-[0_0_40px_rgba(0,242,254,0.3)]">
+                <div className="w-full h-full rounded-full overflow-hidden bg-slate-950 relative">
+                  <img
+                    src="sourabh-profilee.jpg"
+                    alt="Sourabh Singh Mandloi"
+                    className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
+                    onError={(e) => {
+                      // Fallback if image fails
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                  {/* Cyber Grid Scanning Line */}
+                  <motion.div
+                    className="absolute inset-x-0 h-1 bg-cyan-400 shadow-[0_0_10px_#00f2fe]"
+                    animate={{ top: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                </div>
+              </div>
+
+              {/* Floating Orbiting Tech Badges */}
+              <motion.div
+                className="absolute -top-2 right-2 bg-slate-900/90 border border-cyan-400/40 text-cyan-300 px-3 py-1.5 rounded-full text-xs font-mono shadow-lg backdrop-blur-md flex items-center gap-1.5"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <FaServer className="text-cyan-400" />
+                <span>FastAPI + Java</span>
+              </motion.div>
+
+              <motion.div
+                className="absolute -bottom-2 left-2 bg-slate-900/90 border border-emerald-400/40 text-emerald-300 px-3 py-1.5 rounded-full text-xs font-mono shadow-lg backdrop-blur-md flex items-center gap-1.5"
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+              >
+                <FaBrain className="text-emerald-400" />
+                <span>AI / MobileNet</span>
+              </motion.div>
+            </div>
+
+            {/* Telemetry Stats Grid Cards */}
+            <div className="w-full grid grid-cols-2 gap-3 mt-8 max-w-sm">
+              <div className="bg-[#0e1320]/80 p-3.5 rounded-xl border border-cyan-500/20 text-center backdrop-blur-sm">
+                <div className="text-cyan-400 font-bold font-mono text-xl sm:text-2xl tracking-tight">10k+</div>
+                <div className="text-[11px] text-slate-400 font-mono uppercase mt-0.5">Requests / Day</div>
+              </div>
+
+              <div className="bg-[#0e1320]/80 p-3.5 rounded-xl border border-emerald-500/20 text-center backdrop-blur-sm">
+                <div className="text-emerald-400 font-bold font-mono text-xl sm:text-2xl tracking-tight">85%+</div>
+                <div className="text-[11px] text-slate-400 font-mono uppercase mt-0.5">AI Retrieval Accuracy</div>
+              </div>
+
+              <div className="bg-[#0e1320]/80 p-3.5 rounded-xl border border-purple-500/20 text-center backdrop-blur-sm">
+                <div className="text-purple-400 font-bold font-mono text-xl sm:text-2xl tracking-tight">30%</div>
+                <div className="text-[11px] text-slate-400 font-mono uppercase mt-0.5">Latency Reduction</div>
+              </div>
+
+              <div className="bg-[#0e1320]/80 p-3.5 rounded-xl border border-amber-500/20 text-center backdrop-blur-sm">
+                <div className="text-amber-400 font-bold font-mono text-xl sm:text-2xl tracking-tight">100%</div>
+                <div className="text-[11px] text-slate-400 font-mono uppercase mt-0.5">Test Automation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

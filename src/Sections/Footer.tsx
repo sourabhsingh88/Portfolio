@@ -1,235 +1,304 @@
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import {
-  FaLinkedin,
   FaGithub,
-  FaTwitter,
+  FaLinkedin,
   FaEnvelope,
-  FaPhone,
-  FaHeart,
-  FaCode,
+  FaWhatsapp,
   FaArrowUp,
-  FaMapMarkerAlt,
-  FaCopyright,
-} from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
+  FaTerminal,
+  FaClock,
+  FaCopy,
+  FaCheck,
+  FaHeart,
+} from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const Footer = () => {
+interface FooterProps {
+  onOpenTerminal?: () => void;
+  onOpenInquiry?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenTerminal, onOpenInquiry }) => {
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const currentYear = new Date().getFullYear();
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+  const [currentTime, setCurrentTime] = useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
-  const isHomePage = location.pathname === "/";
+  const isHomePage = location.pathname === '/';
+  const currentYear = new Date().getFullYear();
+
+  // Real-time IST (Indore, India - UTC+5:30) Timezone Clock
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      // Format to IST string
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Kolkata',
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      };
+      setCurrentTime(new Intl.DateTimeFormat('en-US', options).format(now));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: element.offsetTop - 80,
-          behavior: "smooth",
-        });
-      }, 100);
+  const copyText = (text: string, type: 'email' | 'phone') => {
+    navigator.clipboard.writeText(text);
+    if (type === 'email') {
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } else {
+      setCopiedPhone(true);
+      setTimeout(() => setCopiedPhone(false), 2000);
     }
   };
 
-  const handleFooterNav = (sectionId: string) => {
+  const navLinks = [
+    { name: 'Home', section: 'hero' },
+    { name: 'Architecture', section: 'projects' },
+    { name: 'Arsenal', section: 'technologies' },
+    { name: 'Mindset', section: 'about' },
+    { name: 'Credentials', section: 'education' },
+    { name: 'Contact', section: 'contact' },
+  ];
+
+  const handleNavClick = (sectionId: string) => {
     if (isHomePage) {
-      scrollToSection(sectionId);
+      const el = document.getElementById(sectionId);
+      if (el) {
+        window.scrollTo({ top: el.offsetTop - 85, behavior: 'smooth' });
+      }
     } else {
       navigate(`/#${sectionId}`);
     }
   };
 
-  useEffect(() => {
-    if (!isHomePage) return;
-
-    const hash = location.hash?.replace("#", "");
-    if (!hash) return;
-
-    const t = setTimeout(() => {
-      scrollToSection(hash);
-    }, 200);
-
-    return () => clearTimeout(t);
-  }, [location, isHomePage]);
-
-  const socialLinks = [
-    {
-      name: "LinkedIn",
-      icon: <FaLinkedin />,
-      link: "https://www.linkedin.com/in/sourabh-singh-mandloi/",
-      color: "bg-blue-600 hover:bg-blue-700",
-    },
-    {
-      name: "GitHub",
-      icon: <FaGithub />,
-      link: "https://github.com/sourabhsingh88",
-      color: "bg-gray-800 hover:bg-gray-900",
-    },
-    {
-      name: "Twitter",
-      icon: <FaTwitter />,
-      link: "https://twitter.com/",
-      color: "bg-blue-400 hover:bg-blue-500",
-    },
-  ];
-
-  const footerLinks = [
-    { name: "Home", section: "hero" },
-    { name: "About", section: "about" },
-    { name: "Education", section: "education" },
-    { name: "Technologies", section: "technologies" },
-    { name: "Projects", section: "projects" },
-    { name: "Contact", section: "contact" },
-  ];
-
-  const contactInfo = [
-    {
-      type: "Email",
-      value: "devsourabh07@gmail.com",
-      icon: <FaEnvelope />,
-      link: "mailto:devsourabh07@gmail.com",
-    },
-    {
-      type: "Phone",
-      value: "9755826293",
-      icon: <FaPhone />,
-      link: "tel:+919755826293",
-    },
-    {
-      type: "Location",
-      value: "Indore, Madhya Pradesh, India",
-      icon: <FaMapMarkerAlt />,
-      link: "#",
-    },
-  ];
-
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-black text-white pt-16 pb-6 border-t border-gray-800 relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 opacity-50"></div>
-      <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-blue-500 opacity-5"></div>
-      <div className="absolute -bottom-16 -left-16 w-32 h-32 rounded-full bg-purple-500 opacity-5"></div>
+    <footer className="relative bg-[#07090f] text-slate-300 pt-16 pb-12 border-t border-cyan-500/20 overflow-hidden font-sans">
+      {/* Background glow lines */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
+      <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[700px] h-[250px] bg-cyan-600/5 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Scroll to top */}
+      {/* Floating Scroll-to-Top Button */}
       <motion.button
-        className={`fixed bottom-8 right-8 w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg z-50 ${
-          showScrollTop ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
         onClick={scrollToTop}
-        initial={{ y: 100, opacity: 0 }}
-        animate={{
-          y: showScrollTop ? 0 : 100,
-          opacity: showScrollTop ? 1 : 0,
-          transition: { duration: 0.3 },
-        }}
-        whileHover={{ y: -5 }}
-        whileTap={{ scale: 0.9 }}
+        className={`fixed bottom-24 right-6 w-11 h-11 rounded-full bg-slate-900/90 border border-cyan-500/40 text-cyan-400 flex items-center justify-center shadow-[0_4px_15px_rgba(0,242,254,0.2)] backdrop-blur-md z-30 transition-all ${
+          showScrollTop ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.95 }}
         aria-label="Scroll to top"
       >
-        <FaArrowUp />
+        <FaArrowUp size={13} />
       </motion.button>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
-          {/* About */}
-          <div className="bg-gray-800 bg-opacity-30 p-6 rounded-lg border border-gray-700 h-full">
-            <h3 className="text-xl font-bold mb-4 pb-2 border-b border-gray-700 inline-block">
-              Sourabh Singh
-            </h3>
-            <p className="text-gray-300 mb-6">
-              Software Engineer & AIML Enthusiast passionate about creating
-              innovative solutions and exploring the world of technology.
-            </p>
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* HUD Minimalist Dock Strip */}
+        <div className="bg-[#0b0f1a]/90 border border-cyan-500/25 rounded-2xl p-5 sm:p-6 mb-12 shadow-xl backdrop-blur-xl">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Left: Timezone HUD Clock */}
+            <div className="flex items-center gap-3 font-mono text-xs">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <FaClock size={16} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 text-slate-400 text-[11px] uppercase">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>LOCAL TIMEZONE // IST (UTC+5:30)</span>
+                </div>
+                <div className="text-base font-bold text-white tracking-wider mt-0.5">
+                  {currentTime || '12:00:00 PM'} <span className="text-cyan-400 text-xs font-normal">INDORE, INDIA</span>
+                </div>
+              </div>
+            </div>
 
-            <div className="flex space-x-3">
-              {socialLinks.map((social, index) => (
+            {/* Middle: Email & Phone Chips */}
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono">
+              {/* Email Chip */}
+              <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 hover:border-cyan-500/40 px-3 py-1.5 rounded-xl transition-all">
                 <a
-                  key={index}
-                  href={social.link}
+                  href="mailto:devsourabh07@gmail.com"
+                  className="text-cyan-300 hover:text-cyan-200"
+                >
+                  devsourabh07@gmail.com
+                </a>
+                <button
+                  onClick={() => copyText('devsourabh07@gmail.com', 'email')}
+                  className="text-slate-400 hover:text-white p-0.5 transition-colors"
+                  title="Copy Email"
+                >
+                  {copiedEmail ? <FaCheck className="text-emerald-400" size={10} /> : <FaCopy size={10} />}
+                </button>
+              </div>
+
+              {/* Phone Chip */}
+              <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 hover:border-emerald-500/40 px-3 py-1.5 rounded-xl transition-all">
+                <a
+                  href="tel:+919755826293"
+                  className="text-emerald-300 hover:text-emerald-200"
+                >
+                  +91 9755826293
+                </a>
+                <a
+                  href="https://wa.me/919755826293"
                   target="_blank"
                   rel="noreferrer"
-                  className={`w-10 h-10 ${social.color} rounded-full flex items-center justify-center text-white shadow-md transition-all`}
-                  aria-label={social.name}
+                  className="text-emerald-400 hover:text-emerald-300 p-0.5"
+                  title="WhatsApp"
                 >
-                  {social.icon}
+                  <FaWhatsapp size={12} />
                 </a>
-              ))}
+                <button
+                  onClick={() => copyText('+919755826293', 'phone')}
+                  className="text-slate-400 hover:text-white p-0.5 transition-colors"
+                  title="Copy Phone"
+                >
+                  {copiedPhone ? <FaCheck className="text-emerald-400" size={10} /> : <FaCopy size={10} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Right: Quick Triggers */}
+            <div className="flex items-center gap-2.5">
+              <button
+                onClick={onOpenTerminal}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 text-xs font-mono inline-flex items-center gap-1.5 transition-colors"
+              >
+                <FaTerminal size={11} />
+                <span>CLI Terminal</span>
+              </button>
+
+              <button
+                onClick={onOpenInquiry}
+                className="px-4 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold font-heading text-xs transition-all shadow-md"
+              >
+                Start a Project
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Navigation Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          {/* Identity Column */}
+          <div className="md:col-span-2 space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-cyan-400 text-slate-950 font-mono font-bold flex items-center justify-center text-xs">
+                S
+              </div>
+              <span className="font-heading font-bold text-white text-lg">
+                Sourabh Singh Mandloi
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+              Full-Stack Systems Architect & AI/ML Specialist building production APIs, distributed architectures, algorithmic trading bots, and computer vision search pipelines.
+            </p>
+            <div className="flex items-center gap-3 pt-2 text-slate-400">
+              <a
+                href="https://github.com/sourabhsingh88"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:text-white transition-colors"
+                aria-label="GitHub"
+              >
+                <FaGithub size={14} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/sourabh-singh-mandloi/"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:text-cyan-400 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin size={14} />
+              </a>
+              <a
+                href="mailto:devsourabh07@gmail.com"
+                className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-400 hover:text-cyan-400 transition-colors"
+                aria-label="Email"
+              >
+                <FaEnvelope size={14} />
+              </a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="bg-gray-800 bg-opacity-30 p-6 rounded-lg border border-gray-700 h-full">
-            <h3 className="text-xl font-bold mb-4 pb-2 border-b border-gray-700 inline-block">
-              Quick Links
-            </h3>
-
-            <div className="grid grid-cols-2 gap-2">
-              {footerLinks.map((link, index) => (
+          {/* Quick Links Column */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-mono uppercase text-cyan-400 font-bold tracking-wider">
+              Navigation
+            </h4>
+            <div className="grid grid-cols-1 gap-1.5 text-xs font-mono">
+              {navLinks.map((link) => (
                 <button
-                  key={index}
-                  onClick={() => handleFooterNav(link.section)}
-                  className="text-left text-gray-300 hover:text-blue-400 transition-colors py-2 flex items-center group"
+                  key={link.name}
+                  onClick={() => handleNavClick(link.section)}
+                  className="text-left text-slate-400 hover:text-cyan-300 transition-colors py-1 flex items-center gap-2 group"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                  {link.name}
+                  <span className="text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity">&gt;</span>
+                  <span>{link.name}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Contact */}
-          <div className="bg-gray-800 bg-opacity-30 p-6 rounded-lg border border-gray-700 h-full">
-            <h3 className="text-xl font-bold mb-4 pb-2 border-b border-gray-700 inline-block">
-              Contact
-            </h3>
-
-            <div className="space-y-4">
-              {contactInfo.map((info, index) => (
-                <a
-                  key={index}
-                  href={info.link}
-                  className="flex items-center text-gray-300 hover:text-blue-400 transition-colors"
-                >
-                  <div className="w-8 h-8 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mr-3 text-blue-400">
-                    {info.icon}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400">{info.type}</p>
-                    <p className="text-sm">{info.value}</p>
-                  </div>
+          {/* Direct Channels Column */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-mono uppercase text-cyan-400 font-bold tracking-wider">
+              Inquiries
+            </h4>
+            <div className="space-y-2 text-xs font-mono text-slate-400">
+              <p>
+                Email:{' '}
+                <a href="mailto:devsourabh07@gmail.com" className="text-slate-300 hover:text-cyan-300">
+                  devsourabh07@gmail.com
                 </a>
-              ))}
+              </p>
+              <p>
+                Phone:{' '}
+                <a href="tel:+919755826293" className="text-slate-300 hover:text-emerald-300">
+                  +91 9755826293
+                </a>
+              </p>
+              <p>
+                Location:{' '}
+                <span className="text-slate-300">Indore, MP, India</span>
+              </p>
+              <div className="pt-2">
+                <span className="inline-block text-[10px] uppercase px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                  Contracts: Active
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-gray-800 pt-6 text-center">
-          <div className="flex flex-col md:flex-row items-center justify-center md:justify-between text-gray-400 text-sm">
-            <div className="flex items-center mb-4 md:mb-0">
-              <FaCopyright className="mr-2" />
-              <p>{currentYear} Sourabh Singh. All rights reserved.</p>
-            </div>
-
-            <div className="flex items-center">
-              <p>Made with</p>
-              <FaHeart className="mx-1 text-red-500" />
-              <p>and</p>
-              <FaCode className="mx-1 text-blue-400" />
-            </div>
+        {/* Copyright & Sub-bar */}
+        <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+          <div>
+            &copy; {currentYear} Sourabh Singh Mandloi. All rights reserved.
+          </div>
+          <div className="flex items-center gap-1.5 text-slate-400">
+            <span>Built with</span>
+            <FaHeart className="text-rose-500" size={11} />
+            <span>using React, Tailwind CSS &amp; Framer Motion</span>
           </div>
         </div>
       </div>

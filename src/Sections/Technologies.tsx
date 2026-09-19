@@ -1,510 +1,365 @@
-import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { 
-  FaPython, FaJava,  FaDatabase, 
-  FaTools, FaDesktop, FaCode, FaChartBar, FaCloud
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  FaJava,
+  FaPython,
+  FaDatabase,
+  FaServer,
+  FaCloud,
+  FaBrain,
+  FaTools,
+  FaAtom,
+  FaThLarge,
 } from 'react-icons/fa';
-import { SiNumpy, SiPandas,  SiScikitlearn} from 'react-icons/si';
+import { SiScikitlearn, SiDocker, SiFastapi, SiSpringboot } from 'react-icons/si';
+import AntiGravityCanvas from '../components/AntiGravityCanvas';
 
-const Technologies = () => {
-  const [activeTab, setActiveTab] = useState(0);
+interface SkillItem {
+  name: string;
+  category: 'backend' | 'cloud' | 'database' | 'architecture';
+  level: number;
+  highlight: string;
+  icon: React.ReactNode;
+  tags: string[];
+}
 
-  // Check if the device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      // setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
+const SKILLS_DATA: SkillItem[] = [
+  // Backend Core
+  {
+    name: 'FastAPI & Async Python',
+    category: 'backend',
+    level: 95,
+    highlight: 'High-throughput async APIs handling 10,000+ req/day with Pydantic validation & MetaTrader5 connectors.',
+    icon: <SiFastapi className="text-cyan-400" />,
+    tags: ['AsyncIO', 'Pydantic', 'WebSockets', 'Swagger'],
+  },
+  {
+    name: 'Spring Boot & Java Enterprise',
+    category: 'backend',
+    level: 92,
+    highlight: 'Production microservices, role-based security, 10+ RESTful APIs with 30% query speedup.',
+    icon: <SiSpringboot className="text-emerald-400" />,
+    tags: ['Spring Security', 'JPA', 'Hibernate', 'Maven'],
+  },
+  {
+    name: 'Core Java & Multi-threading',
+    category: 'backend',
+    level: 90,
+    highlight: 'Object-oriented systems, concurrent executors, algorithmic problem solving & JVM tuning.',
+    icon: <FaJava className="text-orange-400" />,
+    tags: ['OOP', 'Concurrency', 'Collections', 'Design Patterns'],
+  },
+  {
+    name: 'Python Ecosystem',
+    category: 'backend',
+    level: 94,
+    highlight: 'Advanced Python automation, algorithmic trading scripts, backtesting engines, and Flask micro-apps.',
+    icon: <FaPython className="text-blue-400" />,
+    tags: ['NumPy', 'Pandas', 'Flask', 'Automation'],
+  },
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
+  // Cloud & DevOps
+  {
+    name: 'Docker & Containerization',
+    category: 'cloud',
+    level: 85,
+    highlight: 'Multi-stage Docker builds, container networking, microservice orchestration, and dev/prod parity.',
+    icon: <SiDocker className="text-blue-400" />,
+    tags: ['Docker Compose', 'Containers', 'Images', 'Volumes'],
+  },
+  {
+    name: 'CI/CD & Automated Testing',
+    category: 'cloud',
+    level: 88,
+    highlight: 'Automated test suites with PyTest & JUnit achieving 100% code coverage on core trading/search modules.',
+    icon: <FaTools className="text-amber-400" />,
+    tags: ['PyTest', 'GitHub Actions', 'Unit Testing', 'Mocking'],
+  },
+  {
+    name: 'AWS ML & Cloud Foundations',
+    category: 'cloud',
+    level: 82,
+    highlight: 'AWS Academy Graduate - Machine Learning Foundations; cloud instance provisioning & model hosting.',
+    icon: <FaCloud className="text-cyan-400" />,
+    tags: ['AWS S3', 'EC2', 'SageMaker Basics', 'IAM'],
+  },
+
+  // Databases
+  {
+    name: 'Oracle Cloud Database 2025',
+    category: 'database',
+    level: 90,
+    highlight: 'Oracle Certified Professional with hands-on enterprise schema optimization and cloud administration.',
+    icon: <FaDatabase className="text-red-400" />,
+    tags: ['Autonomous DB', 'PL/SQL', 'Oracle Cloud', 'Performance'],
+  },
+  {
+    name: 'MySQL & Relational Modeling',
+    category: 'database',
+    level: 90,
+    highlight: 'Designed normalized schemas with 20+ tables, indexing strategies, complex joins, and ACID compliance.',
+    icon: <FaDatabase className="text-cyan-400" />,
+    tags: ['InnoDB', 'Indexing', 'Transactions', 'Query Plans'],
+  },
+  {
+    name: 'Hibernate & JPA ORM',
+    category: 'database',
+    level: 88,
+    highlight: 'Entity lifecycle management, query caching, N+1 query elimination, and data access layers.',
+    icon: <FaServer className="text-purple-400" />,
+    tags: ['JPQL', 'Criteria API', 'Transactions', 'Entities'],
+  },
+
+  // Architecture & AI
+  {
+    name: 'MobileNet v2 & Computer Vision',
+    category: 'architecture',
+    level: 90,
+    highlight: 'Built image search engine with MobileNet embeddings, boosting retrieval accuracy by 85%+.',
+    icon: <FaBrain className="text-pink-400" />,
+    tags: ['Embeddings', 'TensorFlow/Keras', 'Inference', 'Image Processing'],
+  },
+  {
+    name: 'Cosine Similarity & Search Engines',
+    category: 'architecture',
+    level: 92,
+    highlight: 'Optimized high-dimensional vector similarity indexing, slashing query latency by 40%.',
+    icon: <SiScikitlearn className="text-amber-400" />,
+    tags: ['Vector Math', 'Scikit-learn', 'Feature Extraction'],
+  },
+  {
+    name: 'Automated Trading Architecture',
+    category: 'architecture',
+    level: 92,
+    highlight: 'Event-driven algorithmic trading bot with MetaTrader5 API, yielding 25–30% higher returns.',
+    icon: <FaAtom className="text-emerald-400" />,
+    tags: ['MetaTrader5', 'Risk Engine', 'Backtesting', 'Execution'],
+  },
+];
+
+const CATEGORIES = [
+  { id: 'all', label: 'All Arsenal', icon: <FaAtom /> },
+  { id: 'backend', label: 'Backend Core', icon: <FaServer /> },
+  { id: 'cloud', label: 'Cloud & DevOps', icon: <FaCloud /> },
+  { id: 'database', label: 'Databases', icon: <FaDatabase /> },
+  { id: 'architecture', label: 'Architecture & AI', icon: <FaBrain /> },
+];
+
+export const Technologies: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'canvas' | 'matrix'>('canvas');
+  const [selectedSkill, setSelectedSkill] = useState<SkillItem | null>(SKILLS_DATA[0]);
+
+  const filteredSkills =
+    activeCategory === 'all'
+      ? SKILLS_DATA
+      : SKILLS_DATA.filter((s) => s.category === activeCategory);
+
+  const handleCanvasNodeSelect = (name: string) => {
+    const match = SKILLS_DATA.find((s) => s.name.toLowerCase().includes(name.toLowerCase()));
+    if (match) setSelectedSkill(match);
   };
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0, scale: 0.8 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      transition: { 
-        duration: 0.6, 
-        ease: [0.25, 0.46, 0.45, 0.94],
-        type: "spring",
-        stiffness: 100
-      }
-    }
-  };
-
-  const cardVariants = {
-    hidden: { scale: 0.8, opacity: 0, rotateY: -15 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      rotateY: 0,
-      transition: { 
-        duration: 0.7,
-        type: "spring",
-        stiffness: 120,
-        damping: 15
-      }
-    },
-    hover: {
-      y: -15,
-      scale: 1.02,
-      rotateY: 5,
-      boxShadow: "0px 20px 40px rgba(59, 130, 246, 0.3)",
-      transition: { 
-        duration: 0.4,
-        type: "spring",
-        stiffness: 300,
-        damping: 20
-      }
-    }
-  };
-
-  const iconVariants = {
-    hidden: { scale: 0, rotate: -180, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      rotate: 0,
-      opacity: 1,
-      transition: { 
-        type: "spring", 
-        stiffness: 200, 
-        damping: 15,
-        delay: 0.2
-      } 
-    },
-    hover: { 
-      scale: 1.2,
-      rotate: 10,
-      transition: { 
-        duration: 0.3,
-        type: "spring",
-        stiffness: 400,
-        damping: 10
-      }
-    }
-  };
-
-  const tabVariants = {
-    inactive: { 
-      opacity: 0.6,
-      scale: 0.9,
-      y: 0,
-      backgroundColor: "rgba(55, 65, 81, 0.3)"
-    },
-    active: { 
-      opacity: 1,
-      scale: 1.05,
-      y: -2,
-      backgroundColor: "rgba(59, 130, 246, 0.2)",
-      transition: { 
-        type: "spring", 
-        stiffness: 400, 
-        damping: 25 
-      }
-    }
-  };
-
-  // const floatingVariants = {
-  //   animate: {
-  //     y: [0, -20, 0],
-  //     rotate: [0, 5, 0, -5, 0],
-  //     transition: {
-  //       duration: 6,
-  //       repeat: Infinity,
-  //       repeatType: "reverse",
-  //       ease: "easeInOut"
-  //     }
-  //   }
-  // };
-
-  // const pulseVariants = {
-  //   animate: {
-  //     scale: [1, 1.1, 1],
-  //     opacity: [0.5, 0.8, 0.5],
-  //     transition: {
-  //       duration: 3,
-  //       repeat: Infinity,
-  //       ease: "easeInOut"
-  //     }
-  //   }
-  // };
-
-  // Programming Languages & Tools
-  const programmingSkills = [
-    { 
-      name: "Java", 
-      icon: <FaJava />,
-      level: 90,
-      color: "from-red-500 to-orange-400",
-      description: "Proficient in Java programming with Spring Boot, Spring MVC, and enterprise application development.",
-      libraries: [
-        { name: "Spring Boot", icon: <FaTools /> },
-        { name: "Spring MVC", icon: <FaTools /> },
-        { name: "JPA/Hibernate", icon: <FaDatabase /> }
-      ]
-    },
-    { 
-      name: "Python", 
-      icon: <FaPython />,
-      level: 90,
-      color: "from-blue-500 to-cyan-400",
-      description: "Expert in Python with FastAPI, Flask, and AI/ML libraries for automation and trading systems.",
-      libraries: [
-        { name: "FastAPI", icon: <FaTools /> },
-        { name: "Flask", icon: <FaTools /> },
-        { name: "NumPy", icon: <SiNumpy /> },
-        { name: "Pandas", icon: <SiPandas /> },
-        { name: "Scikit-learn", icon: <SiScikitlearn /> }
-      ]
-    },
-    { 
-      name: "Spring Boot", 
-      icon: <FaTools />,
-      level: 90,
-      color: "from-green-500 to-emerald-400",
-      description: "Enterprise application development with Spring Boot, achieving 30% performance improvements.",
-      libraries: [
-        { name: "Spring MVC", icon: <FaTools /> },
-        { name: "JPA/Hibernate", icon: <FaDatabase /> },
-        { name: "REST APIs", icon: <FaCode /> }
-      ]
-    },
-    { 
-      name: "FastAPI", 
-      icon: <FaTools />,
-      level: 90,
-      color: "from-purple-500 to-violet-400",
-      description: "High-performance API development with FastAPI, supporting 10,000+ requests/day.",
-      libraries: [
-        { name: "Pydantic", icon: <FaTools /> },
-        { name: "MetaTrader5", icon: <FaTools /> },
-        { name: "Automation", icon: <FaTools /> }
-      ]
-    },
-    { 
-      name: "SQL", 
-      icon: <FaDatabase />,
-      level: 85,
-      color: "from-yellow-500 to-amber-400",
-      description: "Skilled in MySQL and Oracle databases with complex queries and database administration.",
-      libraries: [
-        { name: "MySQL", icon: <FaDatabase /> },
-        { name: "Oracle", icon: <FaDatabase /> }
-      ]
-    },
-    { 
-      name: "HTML/CSS", 
-      icon: <FaDesktop />,
-      level: 80,
-      color: "from-cyan-500 to-teal-400",
-      description: "Frontend development with HTML, CSS, and responsive web design."
-    }
-  ];
-
-  // Technical Skills
-  const technicalSkills = [
-    { 
-      name: "REST APIs", 
-      icon: <FaCode />,
-      level: 90,
-      color: "from-green-500 to-emerald-400",
-      description: "Developed 10+ RESTful APIs with optimized queries and JPA/Hibernate integration."
-    },
-    { 
-      name: "AI/ML", 
-      icon: <FaChartBar />,
-      level: 90,
-      color: "from-blue-500 to-indigo-400",
-      description: "Machine learning expertise with MobileNet v2, achieving 85%+ accuracy improvements."
-    },
-    { 
-      name: "OOP", 
-      icon: <FaDesktop />,
-      level: 85,
-      color: "from-yellow-500 to-amber-400",
-      description: "Strong understanding of Object-Oriented Programming concepts and design patterns."
-    },
-    { 
-      name: "Data Structures & Algorithms", 
-      icon: <FaCode />,
-      level: 85,
-      color: "from-red-500 to-rose-400",
-      description: "Proficient in implementing and optimizing algorithms for complex problem-solving."
-    },
-    { 
-      name: "SDLC", 
-      icon: <FaCloud />,
-      level: 80,
-      color: "from-purple-500 to-violet-400",
-      description: "Experience in Software Development Life Cycle methodologies and best practices."
-    },
-    { 
-      name: "DevOps", 
-      icon: <FaTools />,
-      level: 75,
-      color: "from-cyan-500 to-teal-400",
-      description: "Experience in Docker containerization, CI/CD practices, and automated testing."
-    }
-  ];
 
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute top-20 left-0 w-64 h-64 bg-blue-500 rounded-full filter blur-[120px] opacity-10"></div>
-      <div className="absolute bottom-20 right-0 w-64 h-64 bg-purple-500 rounded-full filter blur-[120px] opacity-10"></div>
-      <div className="absolute top-1/3 right-1/4 w-8 h-8 bg-blue-400 rounded-full filter blur-[10px] opacity-20"></div>
-      <div className="absolute bottom-1/3 left-1/4 w-12 h-12 bg-purple-400 rounded-full filter blur-[15px] opacity-20"></div>
-      
-      {/* Animated particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-blue-400"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              opacity: 0.3 + Math.random() * 0.4
-            }}
-            animate={{
-              y: [0, -20, 0],
-              x: [0, Math.random() * 15 - 7, 0],
-              opacity: [0.3, 0.6, 0.3]
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: Math.random() * 2
-            }}
-          />
-        ))}
-      </div>
+    <section
+      id="technologies"
+      className="relative min-h-screen w-full bg-[#0a0a0f] text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden cyber-grid"
+    >
+      {/* Glow aura */}
+      <div className="absolute top-1/2 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <motion.div 
-        id="technologies" 
-        className="min-h-screen w-full py-20 px-4 sm:px-6 lg:px-8 relative z-10"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={containerVariants}
-      >
-        <div className="container mx-auto">
-          <motion.div 
-            className="text-center mb-16"
-            variants={itemVariants}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 mb-4"
-            >
-              <span className="text-blue-400 font-medium">My Skills</span>
-            </motion.div>
-            
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Technologies</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
-            <p className="mt-6 text-gray-300 max-w-2xl mx-auto">
-              A comprehensive showcase of my technical skills and proficiencies across various programming languages,
-              frameworks, and domains.
-            </p>
-          </motion.div>
+      <div className="container mx-auto max-w-7xl relative z-10">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span>TECHNICAL ARSENAL & SKILL MATRIX</span>
+          </div>
 
-          {/* Tab Navigation */}
-          <motion.div 
-            className="flex justify-center mb-12"
-            variants={itemVariants}
-          >
-            <div className="inline-flex bg-gray-800/50 p-1 rounded-lg">
-              <motion.button
-                className={`px-6 py-2 rounded-md text-sm font-medium ${activeTab === 0 ? 'bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white' : 'text-gray-300'}`}
-                onClick={() => setActiveTab(0)}
-                variants={tabVariants}
-                animate={activeTab === 0 ? 'active' : 'inactive'}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Programming Skills
-              </motion.button>
-              <motion.button
-                className={`px-6 py-2 rounded-md text-sm font-medium ${activeTab === 1 ? 'bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white' : 'text-gray-300'}`}
-                onClick={() => setActiveTab(1)}
-                variants={tabVariants}
-                animate={activeTab === 1 ? 'active' : 'inactive'}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Technical Skills
-              </motion.button>
-            </div>
-          </motion.div>
+          <h2 className="text-3xl sm:text-5xl font-bold font-heading tracking-tight">
+            High-Impact <span className="text-gradient-cyan">Capabilities</span> & Physics Engine
+          </h2>
 
-          {/* Programming Languages & Tools */}
-          <motion.div 
-            className={`${activeTab === 0 ? 'block' : 'hidden'}`}
-            variants={containerVariants}
-            initial="hidden"
-            animate={activeTab === 0 ? 'visible' : 'hidden'}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {programmingSkills.map((skill, index) => (
-                <motion.div 
-                  key={index}
-                  className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl border border-gray-700/50 overflow-hidden shadow-lg backdrop-blur-sm"
-                  variants={cardVariants}
-                  whileHover="hover"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      <motion.div 
-                        className="text-4xl text-blue-400 mr-4 bg-blue-500/10 p-3 rounded-lg"
-                        variants={iconVariants}
-                        whileHover="hover"
-                      >
-                        {skill.icon}
-                      </motion.div>
-                      <div>
-                        <h4 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">{skill.name}</h4>
-                        <div className="mt-1 w-full bg-gray-700/50 rounded-full h-2">
-                          <motion.div 
-                            className={`h-2 rounded-full bg-gradient-to-r ${skill.color}`}
-                            style={{ width: `${skill.level}%` }}
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${skill.level}%` }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                            viewport={{ once: true }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-gray-300 mb-4">{skill.description}</p>
-                    
-                    {skill.libraries && (
-                      <div className="mt-4">
-                        <h5 className="text-sm uppercase tracking-wider text-gray-400 mb-3 flex items-center">
-                          <span className="w-5 h-0.5 bg-blue-500 mr-2"></span>
-                          Libraries & Frameworks
-                        </h5>
-                        <div className="flex flex-wrap gap-3">
-                          {skill.libraries.map((lib, libIndex) => (
-                            <motion.div 
-                              key={libIndex}
-                              className="flex items-center bg-gray-800/70 px-3 py-1 rounded-full border border-gray-700/50"
-                              initial={{ opacity: 0, x: -10 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.5 + (libIndex * 0.1) }}
-                              viewport={{ once: true }}
-                              whileHover={{ scale: 1.05, borderColor: "#3b82f6" }}
-                            >
-                              <span className="text-blue-400 mr-2">{lib.icon}</span>
-                              <span className="text-sm">{lib.name}</span>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Technical Skills */}
-          <motion.div
-            className={`${activeTab === 1 ? 'block' : 'hidden'}`}
-            variants={containerVariants}
-            initial="hidden"
-            animate={activeTab === 1 ? 'visible' : 'hidden'}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {technicalSkills.map((skill, index) => (
-                <motion.div 
-                  key={index}
-                  className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl border border-gray-700/50 overflow-hidden shadow-lg backdrop-blur-sm"
-                  variants={cardVariants}
-                  whileHover="hover"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      <motion.div 
-                        className="text-4xl text-blue-400 mr-4 bg-blue-500/10 p-3 rounded-lg"
-                        variants={iconVariants}
-                        whileHover="hover"
-                      >
-                        {skill.icon}
-                      </motion.div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">{skill.name}</h4>
-                        <div className="flex items-center mt-1">
-                          <div className="flex-1 bg-gray-700/50 rounded-full h-2 mr-2">
-                            <motion.div 
-                              className={`h-2 rounded-full bg-gradient-to-r ${skill.color}`}
-                              style={{ width: `${skill.level}%` }}
-                              initial={{ width: 0 }}
-                              whileInView={{ width: `${skill.level}%` }}
-                              transition={{ duration: 1, delay: 0.5 }}
-                              viewport={{ once: true }}
-                            />
-                          </div>
-                          <span className="text-xs text-gray-400">{skill.level}%</span>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-gray-300">{skill.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Skills Radar Chart (Optional) */}
-          <motion.div 
-            className="mt-20 text-center"
-            variants={itemVariants}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-2xl font-semibold mb-6">Skills Overview</h3>
-            <div className="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
-              {[...programmingSkills, ...technicalSkills].map((skill, index) => (
-                <motion.div
-                  key={index}
-                  className="px-4 py-2 rounded-full bg-gradient-to-r from-gray-800/70 to-gray-900/70 border border-gray-700/50"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05, y: -3 }}
-                >
-                  <span className="text-gray-300">{skill.name}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Engineered across robust microservice backends, cloud-native pipelines, and neural networks.
+            Interact with the zero-gravity particle field or inspect the deep skill matrix.
+          </p>
         </div>
-      </motion.div>
-    </div>
+
+        {/* Controls: Category Filter + View Mode Toggle */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+          {/* Category Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono tracking-wide uppercase transition-all flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-cyan-500/20 border border-cyan-400 text-cyan-300 shadow-[0_0_15px_rgba(0,242,254,0.2)]'
+                      : 'bg-slate-900/80 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  }`}
+                >
+                  <span className={isActive ? 'text-cyan-400' : 'text-slate-500'}>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* View Mode Toggle: Canvas vs Matrix Grid */}
+          <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+            <button
+              onClick={() => setViewMode('canvas')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all ${
+                viewMode === 'canvas'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <FaAtom size={12} />
+              <span>Anti-Gravity</span>
+            </button>
+            <button
+              onClick={() => setViewMode('matrix')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all ${
+                viewMode === 'matrix'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <FaThLarge size={12} />
+              <span>Matrix Grid</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <AnimatePresence mode="wait">
+          {viewMode === 'canvas' ? (
+            <motion.div
+              key="canvas-view"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
+              {/* Interactive Canvas */}
+              <AntiGravityCanvas
+                activeCategory={activeCategory}
+                onSelectNode={handleCanvasNodeSelect}
+              />
+
+              {/* Selected Node Details Card */}
+              {selectedSkill && (
+                <div className="bg-[#0e1322] border border-cyan-500/30 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 backdrop-blur-md">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(0,242,254,0.2)]">
+                      {selectedSkill.icon}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-xl font-bold text-white font-heading">
+                          {selectedSkill.name}
+                        </h4>
+                        <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-400 border border-slate-700">
+                          {selectedSkill.category}
+                        </span>
+                      </div>
+                      <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
+                        {selectedSkill.highlight}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {selectedSkill.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="w-full md:w-48 bg-slate-900/80 p-4 rounded-xl border border-slate-800 text-center">
+                    <div className="text-xs font-mono text-slate-400 mb-1 uppercase">Proficiency</div>
+                    <div className="text-2xl font-bold font-mono text-cyan-400">{selectedSkill.level}%</div>
+                    <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400"
+                        style={{ width: `${selectedSkill.level}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="matrix-view"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 15 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {filteredSkills.map((skill, idx) => (
+                <motion.div
+                  key={skill.name}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  onClick={() => setSelectedSkill(skill)}
+                  className={`p-6 rounded-2xl border transition-all cursor-pointer ${
+                    selectedSkill?.name === skill.name
+                      ? 'bg-[#0f172a] border-cyan-400/70 shadow-[0_0_20px_rgba(0,242,254,0.15)]'
+                      : 'bg-[#0e1322]/80 border-slate-800 hover:border-cyan-500/40'
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-2xl">
+                      {skill.icon}
+                    </div>
+                    <div className="text-right font-mono">
+                      <span className="text-cyan-400 font-bold text-sm">{skill.level}%</span>
+                      <div className="w-16 bg-slate-800 h-1 rounded-full mt-1 overflow-hidden">
+                        <div
+                          className="h-full bg-cyan-400"
+                          style={{ width: `${skill.level}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <h4 className="text-base font-bold text-white font-heading mb-1.5">
+                    {skill.name}
+                  </h4>
+                  <p className="text-slate-400 text-xs leading-relaxed mb-4">
+                    {skill.highlight}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-800/80">
+                    {skill.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
   );
 };
 
