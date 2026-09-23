@@ -24,28 +24,28 @@ interface AntiGravityCanvasProps {
 }
 
 const TECH_ITEMS = [
-  { name: 'FastAPI', category: 'backend', color: '#00f2fe', glow: 'rgba(0, 242, 254, 0.4)' },
-  { name: 'Spring Boot', category: 'backend', color: '#00ff88', glow: 'rgba(0, 255, 136, 0.4)' },
-  { name: 'Java', category: 'backend', color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.4)' },
-  { name: 'Python', category: 'backend', color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.4)' },
-  { name: 'REST APIs', category: 'backend', color: '#818cf8', glow: 'rgba(129, 140, 248, 0.4)' },
-  { name: 'Microservices', category: 'backend', color: '#a78bfa', glow: 'rgba(167, 139, 250, 0.4)' },
-  
-  { name: 'Docker', category: 'cloud', color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.4)' },
-  { name: 'CI/CD Pipelines', category: 'cloud', color: '#34d399', glow: 'rgba(52, 211, 153, 0.4)' },
-  { name: 'AWS ML', category: 'cloud', color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.4)' },
-  { name: 'Linux SysOps', category: 'cloud', color: '#fb7185', glow: 'rgba(251, 113, 133, 0.4)' },
-  
-  { name: 'MySQL', category: 'database', color: '#0284c7', glow: 'rgba(2, 132, 199, 0.4)' },
-  { name: 'Oracle Cloud DB', category: 'database', color: '#ef4444', glow: 'rgba(239, 68, 68, 0.4)' },
-  { name: 'Hibernate/JPA', category: 'database', color: '#c084fc', glow: 'rgba(192, 132, 252, 0.4)' },
-  { name: 'Schema Design', category: 'database', color: '#2dd4bf', glow: 'rgba(45, 212, 191, 0.4)' },
-  
-  { name: 'AI/ML Systems', category: 'architecture', color: '#00f2fe', glow: 'rgba(0, 242, 254, 0.4)' },
-  { name: 'MobileNet v2', category: 'architecture', color: '#ec4899', glow: 'rgba(236, 72, 153, 0.4)' },
-  { name: 'Computer Vision', category: 'architecture', color: '#a855f7', glow: 'rgba(168, 85, 247, 0.4)' },
-  { name: 'Cosine Sim Engine', category: 'architecture', color: '#10b981', glow: 'rgba(16, 185, 129, 0.4)' },
-  { name: 'Automated Trading', category: 'architecture', color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.4)' },
+  { name: 'FastAPI', category: 'backend', color: '#00f2fe', glow: 'rgba(0, 242, 254, 0.35)' },
+  { name: 'Spring Boot', category: 'backend', color: '#00ff88', glow: 'rgba(0, 255, 136, 0.35)' },
+  { name: 'Java', category: 'backend', color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.35)' },
+  { name: 'Python', category: 'backend', color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.35)' },
+  { name: 'REST APIs', category: 'backend', color: '#818cf8', glow: 'rgba(129, 140, 248, 0.35)' },
+  { name: 'Microservices', category: 'backend', color: '#a78bfa', glow: 'rgba(167, 139, 250, 0.35)' },
+
+  { name: 'Docker', category: 'cloud', color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.35)' },
+  { name: 'CI/CD Pipelines', category: 'cloud', color: '#34d399', glow: 'rgba(52, 211, 153, 0.35)' },
+  { name: 'AWS ML', category: 'cloud', color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.35)' },
+  { name: 'Linux SysOps', category: 'cloud', color: '#fb7185', glow: 'rgba(251, 113, 133, 0.35)' },
+
+  { name: 'MySQL', category: 'database', color: '#0284c7', glow: 'rgba(2, 132, 199, 0.35)' },
+  { name: 'Oracle Cloud DB', category: 'database', color: '#ef4444', glow: 'rgba(239, 68, 68, 0.35)' },
+  { name: 'Hibernate/JPA', category: 'database', color: '#c084fc', glow: 'rgba(192, 132, 252, 0.35)' },
+  { name: 'Schema Design', category: 'database', color: '#2dd4bf', glow: 'rgba(45, 212, 191, 0.35)' },
+
+  { name: 'AI/ML Systems', category: 'architecture', color: '#00f2fe', glow: 'rgba(0, 242, 254, 0.35)' },
+  { name: 'MobileNet v2', category: 'architecture', color: '#ec4899', glow: 'rgba(236, 72, 153, 0.35)' },
+  { name: 'Computer Vision', category: 'architecture', color: '#a855f7', glow: 'rgba(168, 85, 247, 0.35)' },
+  { name: 'Cosine Sim Engine', category: 'architecture', color: '#10b981', glow: 'rgba(16, 185, 129, 0.35)' },
+  { name: 'Automated Trading', category: 'architecture', color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.35)' },
 ];
 
 export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
@@ -53,10 +53,13 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
   onSelectNode,
   className = '',
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodesRef = useRef<TechNode[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000, isHovering: false, isDown: false, draggedNode: null as TechNode | null });
   const [hoveredNodeName, setHoveredNodeName] = useState<string | null>(null);
+  const lastHoveredRef = useRef<string | null>(null);
+  const isVisibleRef = useRef(true);
 
   // Initialize nodes
   const initNodes = useCallback((width: number, height: number) => {
@@ -68,8 +71,8 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
     nodesRef.current = TECH_ITEMS.map((item, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
-      const baseX = cellW * (col + 1) + (Math.random() * 40 - 20);
-      const baseY = cellH * (row + 1) + (Math.random() * 30 - 15);
+      const baseX = cellW * (col + 1) + (Math.random() * 30 - 15);
+      const baseY = cellH * (row + 1) + (Math.random() * 20 - 10);
 
       return {
         id: `node-${index}`,
@@ -77,59 +80,77 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
         category: item.category as TechNode['category'],
         x: baseX,
         y: baseY,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: 36,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        radius: 34,
         color: item.color,
         glowColor: item.glow,
         baseX,
         baseY,
         floatAngle: Math.random() * Math.PI * 2,
-        floatSpeed: 0.015 + Math.random() * 0.015,
+        floatSpeed: 0.012 + Math.random() * 0.01,
       };
     });
   }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || 800);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 500);
+    let width = (canvas.width = container.clientWidth || 800);
+    let height = (canvas.height = container.clientHeight || 500);
 
     const handleResize = () => {
-      if (!canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
+      if (!container) return;
+      width = canvas.width = container.clientWidth;
+      height = canvas.height = container.clientHeight;
       initNodes(width, height);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     initNodes(width, height);
+
+    // Pause canvas loop when offscreen using IntersectionObserver to save 100% CPU/GPU
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          cancelAnimationFrame(animationId);
+          animationId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(container);
 
     // Animation Loop
     const render = () => {
+      if (!isVisibleRef.current) return;
+
       ctx.clearRect(0, 0, width, height);
 
       const nodes = nodesRef.current;
       const mouse = mouseRef.current;
+      const nodesCount = nodes.length;
 
       // Draw constellation connections
       ctx.lineWidth = 1;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i];
+      for (let i = 0; i < nodesCount; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodesCount; j++) {
           const b = nodes[j];
           const dx = a.x - b.x;
           const dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < 150) {
-            const alpha = (1 - dist / 150) * 0.2;
-            ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
+          // distSq < 22500 is equivalent to dist < 150 (avoids Math.sqrt)
+          if (distSq < 22500) {
+            const dist = Math.sqrt(distSq);
+            ctx.strokeStyle = `rgba(0, 242, 254, ${(1 - dist / 150) * 0.18})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -137,16 +158,16 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
           }
         }
 
-        // Draw connections to mouse
+        // Draw connections to mouse if active
         if (mouse.isHovering) {
-          const dx = nodes[i].x - mouse.x;
-          const dy = nodes[i].y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 160) {
-            const alpha = (1 - dist / 160) * 0.4;
-            ctx.strokeStyle = `rgba(0, 255, 136, ${alpha})`;
+          const dx = a.x - mouse.x;
+          const dy = a.y - mouse.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < 25600) {
+            const dist = Math.sqrt(distSq);
+            ctx.strokeStyle = `rgba(0, 255, 136, ${(1 - dist / 160) * 0.35})`;
             ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.moveTo(a.x, a.y);
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
           }
@@ -156,20 +177,16 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
       // Update & Render nodes
       let foundHover: string | null = null;
 
-      for (let i = 0; i < nodes.length; i++) {
+      for (let i = 0; i < nodesCount; i++) {
         const node = nodes[i];
         const isDimmed = activeCategory !== 'all' && node.category !== activeCategory;
 
         // Anti-gravity float oscillation
         node.floatAngle += node.floatSpeed;
-        const driftX = Math.sin(node.floatAngle) * 12;
-        const driftY = Math.cos(node.floatAngle * 0.8) * 14;
+        const targetX = node.baseX + Math.sin(node.floatAngle) * 10;
+        const targetY = node.baseY + Math.cos(node.floatAngle * 0.8) * 12;
 
-        // Target baseline with drift
-        const targetX = node.baseX + driftX;
-        const targetY = node.baseY + driftY;
-
-        // Spring toward target
+        // Spring toward anchor
         node.vx += (targetX - node.x) * 0.015;
         node.vy += (targetY - node.y) * 0.015;
 
@@ -177,16 +194,16 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
         if (mouse.isHovering) {
           const dx = node.x - mouse.x;
           const dy = node.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const minSafeDist = 130;
+          const distSq = dx * dx + dy * dy;
+          const minSafeDist = 125;
 
-          if (dist < minSafeDist && dist > 0) {
-            // Anti-gravity repulsion field
-            const force = (1 - dist / minSafeDist) * 1.8;
+          if (distSq < minSafeDist * minSafeDist && distSq > 0) {
+            const dist = Math.sqrt(distSq);
+            const force = (1 - dist / minSafeDist) * 1.6;
             node.vx += (dx / dist) * force;
             node.vy += (dy / dist) * force;
 
-            if (dist < node.radius + 15) {
+            if (dist < node.radius + 12) {
               foundHover = node.name;
             }
           }
@@ -207,8 +224,8 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
           node.y += node.vy;
         }
 
-        // Keep inside bounds
-        const pad = node.radius + 10;
+        // Keep inside canvas bounds
+        const pad = node.radius + 8;
         if (node.x < pad) { node.x = pad; node.vx *= -0.5; }
         if (node.x > width - pad) { node.x = width - pad; node.vx *= -0.5; }
         if (node.y < pad) { node.y = pad; node.vy *= -0.5; }
@@ -218,20 +235,17 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
         const isHovered = foundHover === node.name;
         const opacity = isDimmed ? 0.25 : isHovered ? 1 : 0.85;
 
-        // Ambient radial glow
-        const glowRad = isHovered ? node.radius * 2 : node.radius * 1.4;
-        const grad = ctx.createRadialGradient(node.x, node.y, 5, node.x, node.y, glowRad);
-        grad.addColorStop(0, node.glowColor);
-        grad.addColorStop(1, 'transparent');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, glowRad, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Node Body Pill/Circle
         ctx.save();
         ctx.globalAlpha = opacity;
-        ctx.fillStyle = isHovered ? 'rgba(18, 24, 38, 0.95)' : 'rgba(12, 16, 26, 0.85)';
+
+        // Soft ambient glow halo
+        ctx.fillStyle = node.glowColor;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, isHovered ? node.radius + 12 : node.radius + 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Node Body Pill
+        ctx.fillStyle = isHovered ? 'rgba(18, 24, 38, 0.96)' : 'rgba(12, 16, 26, 0.9)';
         ctx.strokeStyle = isHovered ? node.color : 'rgba(255, 255, 255, 0.15)';
         ctx.lineWidth = isHovered ? 2 : 1;
 
@@ -243,12 +257,12 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
         // Inner subtle orbital ring
         ctx.strokeStyle = `${node.color}40`;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius - 6, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, node.radius - 5, 0, Math.PI * 2);
         ctx.stroke();
 
         // Label
         ctx.fillStyle = isHovered ? '#ffffff' : '#cbd5e1';
-        ctx.font = `${isHovered ? '600' : '500'} ${node.radius > 32 ? '11px' : '10px'} 'Space Grotesk', sans-serif`;
+        ctx.font = `${isHovered ? '600' : '500'} 11px 'Space Grotesk', sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(node.name, node.x, node.y);
@@ -256,14 +270,20 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
         ctx.restore();
       }
 
-      setHoveredNodeName(foundHover);
+      // ONLY trigger React re-render when the hovered node name changes (prevents 60fps React state churn)
+      if (foundHover !== lastHoveredRef.current) {
+        lastHoveredRef.current = foundHover;
+        setHoveredNodeName(foundHover);
+      }
+
       animationId = requestAnimationFrame(render);
     };
 
-    render();
+    animationId = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(animationId);
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
     };
   }, [activeCategory, initNodes]);
@@ -284,10 +304,9 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
     const my = e.clientY - rect.top;
     mouseRef.current.isDown = true;
 
-    // Find if clicked on a node
     for (const node of nodesRef.current) {
-      const dist = Math.hypot(node.x - mx, node.y - my);
-      if (dist <= node.radius) {
+      const distSq = (node.x - mx) ** 2 + (node.y - my) ** 2;
+      if (distSq <= node.radius * node.radius) {
         mouseRef.current.draggedNode = node;
         if (onSelectNode) onSelectNode(node.name);
         break;
@@ -306,13 +325,19 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
     mouseRef.current.draggedNode = null;
     mouseRef.current.x = -1000;
     mouseRef.current.y = -1000;
-    setHoveredNodeName(null);
+    if (lastHoveredRef.current !== null) {
+      lastHoveredRef.current = null;
+      setHoveredNodeName(null);
+    }
   };
 
   return (
-    <div className={`relative w-full h-[450px] md:h-[540px] rounded-2xl overflow-hidden glass-panel border border-cyan-500/20 ${className}`}>
+    <div
+      ref={containerRef}
+      className={`relative w-full h-[440px] md:h-[500px] rounded-2xl overflow-hidden glass-panel border border-cyan-500/20 ${className}`}
+    >
       {/* Background cyber grid inside canvas */}
-      <div className="absolute inset-0 cyber-grid pointer-events-none opacity-40" />
+      <div className="absolute inset-0 cyber-grid pointer-events-none opacity-30" />
 
       {/* Top HUD Status Bar */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10 text-xs font-mono">
@@ -345,7 +370,7 @@ export const AntiGravityCanvas: React.FC<AntiGravityCanvasProps> = ({
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerLeave}
-        className="w-full h-full cursor-grab active:cursor-grabbing block"
+        className="w-full h-full cursor-grab active:cursor-grabbing block will-change-transform"
       />
     </div>
   );

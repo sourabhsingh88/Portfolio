@@ -1,12 +1,48 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaTerminal, FaBolt } from 'react-icons/fa';
+import { FaTerminal, FaBolt } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
+import MagneticButton from '../components/MagneticButton';
 
 interface NavbarProps {
   onOpenInquiry?: () => void;
   onOpenTerminal?: () => void;
 }
+
+const NAV_LINKS = [
+  { name: 'System', section: 'hero' },
+  { name: 'Architecture', section: 'projects' },
+  { name: 'Arsenal', section: 'technologies' },
+  { name: 'Mindset', section: 'about' },
+  { name: 'Credentials', section: 'education' },
+  { name: 'Contact', section: 'contact' },
+];
+
+/* ---------- Morphing hamburger <-> close icon ---------- */
+const MenuIcon: React.FC<{ open: boolean }> = ({ open }) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <motion.line
+      x1="3" y1="6" x2="21" y2="6"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+      animate={open ? { rotate: 45, y1: 12, y2: 12 } : { rotate: 0, y1: 6, y2: 6 }}
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
+      style={{ originX: '12px', originY: '12px' }}
+    />
+    <motion.line
+      x1="3" y1="12" x2="21" y2="12"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+      animate={open ? { opacity: 0 } : { opacity: 1 }}
+      transition={{ duration: 0.15 }}
+    />
+    <motion.line
+      x1="3" y1="18" x2="21" y2="18"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+      animate={open ? { rotate: -45, y1: 12, y2: 12 } : { rotate: 0, y1: 18, y2: 18 }}
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
+      style={{ originX: '12px', originY: '12px' }}
+    />
+  </svg>
+);
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry, onOpenTerminal }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,31 +52,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry, onOpenTerminal })
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
+  /* rAF-throttled scroll listener */
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const offset = window.scrollY;
-      setScrolled(offset > 40);
-
-      if (isHomePage) {
-        const sections = document.querySelectorAll('section[id], div[id]');
-        let currentActive = 'hero';
-
-        sections.forEach((section) => {
-          const sectionTop = (section as HTMLElement).offsetTop - 120;
-          const sectionHeight = (section as HTMLElement).offsetHeight;
-          if (offset >= sectionTop && offset < sectionTop + sectionHeight) {
-            currentActive = section.id;
-          }
-        });
-
-        setActiveSection(currentActive);
-      }
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40);
+        ticking = false;
+      });
     };
-
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  /* IntersectionObserver for active-section tracking — replaces manual scroll math */
+  useEffect(() => {
+    if (!isHomePage) return;
+    const sections = NAV_LINKS.map((l) => document.getElementById(l.section)).filter(
+      (el): el is HTMLElement => !!el
+    );
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: '-100px 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+
+    sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, [isHomePage]);
 
+  /* Close on outside click */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node) && isOpen) {
@@ -51,32 +101,36 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry, onOpenTerminal })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const scrollToSection = (sectionId: string) => {
-    if (!isHomePage) return;
-    const element = document.getElementById(sectionId.replace('#', ''));
-    if (element) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: element.offsetTop - 85,
-          behavior: 'smooth',
-        });
-        setIsOpen(false);
-      }, 50);
-    }
-  };
+  /* Close on Escape + lock body scroll while the mobile menu is open */
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
-  const navLinks = [
-    { name: 'System', section: 'hero' },
-    { name: 'Architecture', section: 'projects' },
-    { name: 'Arsenal', section: 'technologies' },
-    { name: 'Mindset', section: 'about' },
-    { name: 'Credentials', section: 'education' },
-    { name: 'Contact', section: 'contact' },
-  ];
+  const scrollToSection = useCallback(
+    (sectionId: string) => {
+      if (!isHomePage) return;
+      const element = document.getElementById(sectionId);
+      if (element) {
+        setIsOpen(false);
+        window.scrollTo({ top: element.offsetTop - 85, behavior: 'smooth' });
+      }
+    },
+    [isHomePage]
+  );
+
+  const navLinks = useMemo(() => NAV_LINKS, []);
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-40 transition-[background-color,box-shadow,padding] duration-300 ${
         scrolled
           ? 'bg-[#090c14]/90 backdrop-blur-xl border-b border-cyan-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3'
           : 'bg-transparent py-5'
@@ -89,15 +143,40 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry, onOpenTerminal })
         <div className="flex justify-between items-center">
           {/* Logo & Status Badge */}
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-slate-950 font-mono font-bold text-sm shadow-[0_0_15px_rgba(0,242,254,0.4)] group-hover:scale-105 transition-transform">
-                S
+            <Link to="/" className="flex items-center gap-2.5 group">
+              {/* Hex-node monogram */}
+              <div className="relative w-9 h-9 flex items-center justify-center">
+                <svg
+                  viewBox="0 0 36 36"
+                  className="relative w-8 h-8 drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]"
+                >
+                  <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#22d3ee" />
+                      <stop offset="100%" stopColor="#a78bfa" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M18 2 L31 9.5 V26.5 L18 34 L5 26.5 V9.5 Z"
+                    fill="#0a0f1a"
+                    stroke="url(#logoGrad)"
+                    strokeWidth="1.6"
+                  />
+                  <path
+                    d="M23 11.5c-1.4-1.2-3.4-1.7-5.2-1.2-2 .6-3.3 2.3-3 4 .3 1.9 2.3 2.6 4.1 3.1 2 .6 4.3 1.3 4.6 3.4.3 2-1.3 3.7-3.4 4.2-2 .5-4.1 0-5.6-1.2"
+                    fill="none"
+                    stroke="url(#logoGrad)"
+                    strokeWidth="2.1"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </div>
+
               <div>
-                <span className="text-white font-heading font-bold text-base tracking-tight">
+                <span className="font-heading font-extrabold text-base tracking-[0.04em] flex items-center leading-none text-white">
                   SOURABH<span className="text-cyan-400">.</span>SINGH
                 </span>
-                <span className="hidden sm:inline-block ml-2 text-[10px] font-mono uppercase text-slate-500 tracking-wider">
+                <span className="hidden sm:inline-block text-[10px] font-mono uppercase text-slate-500 tracking-wider">
                   // FULL-STACK & AI
                 </span>
               </div>
@@ -168,16 +247,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry, onOpenTerminal })
               <FaTerminal size={12} />
             </motion.button>
 
-            {/* "Start a Project" Button */}
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={onOpenInquiry}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-heading text-xs font-bold tracking-wide shadow-[0_0_15px_rgba(0,242,254,0.3)] transition-all flex items-center gap-1.5"
-            >
-              <FaBolt size={10} />
-              <span>Start a Project</span>
-            </motion.button>
+            {/* "Start a Project" Button with Magnetic physics */}
+            <MagneticButton strength={15}>
+              <button
+                onClick={onOpenInquiry}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-heading text-xs font-bold tracking-wide shadow-[0_0_15px_rgba(0,242,254,0.3)] transition-all flex items-center gap-1.5"
+              >
+                <FaBolt size={10} />
+                <span>Start a Project</span>
+              </button>
+            </MagneticButton>
           </div>
 
           {/* Mobile Menu & Terminal Trigger */}
@@ -194,7 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInquiry, onOpenTerminal })
               className="text-white bg-slate-900 border border-slate-800 p-2 rounded-lg"
               aria-label="Toggle Navigation"
             >
-              {isOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
+              <MenuIcon open={isOpen} />
             </button>
           </div>
         </div>

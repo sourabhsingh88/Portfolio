@@ -9,4 +9,17 @@ export default defineConfig(({ command }) => ({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+          icons: ['react-icons'],
+          confetti: ['canvas-confetti'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
+  },
 }))
